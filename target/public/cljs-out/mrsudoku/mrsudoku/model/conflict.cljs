@@ -12,18 +12,15 @@
 (defn values
   "Return the set of values of a vector or grid `cells`."
   [cells]
-  (disj (into #{}(map g/cell-value cells)) nil));; Attention : réponse fausse)
+  ;; Attention : réponse fausse
+  #{})
 
 (defn values-except
   "Return the set of values of a vector of cells, except the `except`-th."
   [cells except]
-  ;;{:pre [(<= 1 except (count cells))]}
-  (println (values cells))
-  (loop [s (values cells),res #{},index 1]
-    (println)
-    (if (seq s)
-      (if (= except index)(recur (rest s) res (inc index))(recur (rest s) (conj res (first s)) (inc index)))
-      res)))
+  {:pre [(<= 1 except (count cells))]}
+  ;; Attention : réponse fausse
+  #{})
 
 (defn mk-conflict [kind cx cy value]
   {:status :conflict
@@ -40,7 +37,7 @@
   conflict1)
 
 (defn merge-conflicts [& conflicts]
-  (apply (partial merge-with merge-conflict) conflicts))
+  (apply (partial merge-with merge-conflict) conflicts)) 
 
 (defn update-conflicts
   [conflict-kind cx cy value conflicts]
@@ -80,7 +77,7 @@
   ;; Attention : réponse fausse
   {})
 
-(defn rows-conflicts
+(defn rows-conflicts 
   "Returns a map of conflicts in all rows of `grid`"
   [grid]
   ;; Attention : réponse fausse
@@ -106,3 +103,4 @@
   (merge-conflicts (rows-conflicts grid)
                    (cols-conflicts grid)
                    (blocks-conflicts grid)))
+
