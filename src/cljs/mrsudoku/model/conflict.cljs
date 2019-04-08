@@ -17,13 +17,12 @@
 (defn values-except
   "Return the set of values of a vector of cells, except the `except`-th."
   [cells except]
-  ;;{:pre [(<= 1 except (count cells))]}
-  (println (values cells))
-  (loop [s (values cells),res #{},index 1]
-    (println)
-    (if (seq s)
-      (if (= except index)(recur (rest s) res (inc index))(recur (rest s) (conj res (first s)) (inc index)))
-      res)))
+  {:pre [(<= 1 except (count cells))]}
+  (loop [s cells,co 1,res []]
+    (let [c (g/cell-value (first s))](if (seq s)(if (= c nil)(recur (rest s) co res)(if (= except co)(recur (rest s) (inc co) res)(recur (rest s) (inc co) (conj res c))))(into #{} res)))))
+
+
+
 
 (defn mk-conflict [kind cx cy value]
   {:status :conflict
@@ -31,9 +30,7 @@
    :value value})
 
 (defn merge-conflict-kind
-  [kind1 kind2]
-  ;; Attention : réponse fausse
-  kind1)
+     [kind1 kind2] (if (= kind1 kind2) kind1 (let [res (if (keyword? kind2)(conj #{} kind2) kind2)] (loop [s (if (keyword? kind1)(conj #{} kind1)kind1),res res](if (seq s) (recur (rest s) (conj res (first s)))res)))))
 
 (defn merge-conflict [conflict1 conflict2]
   ;; Attention : réponse fausse
