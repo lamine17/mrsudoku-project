@@ -17,7 +17,7 @@
   (is (= (cell sudoku-grid 1 1)
          {:status :init, :value 5}))
 
-  (is (= (cell sudoku-grid 2 1) 
+  (is (= (cell sudoku-grid 2 1)
          {:status :init, :value 3}))
 
   (is (= (cell sudoku-grid 3 1)
@@ -32,8 +32,8 @@
   (is (= (cell sudoku-grid 5 6)
          {:status :init, :value 2}))
 
-  (is (= (cell sudoku-grid 9 9)) 
-      {:status :init, :value 9}))
+  (is (= (cell sudoku-grid 9 9)
+      {:status :init, :value 9})))
 
 (deftest change-cell-test
   (is (= (cell (change-cell sudoku-grid 1 1 {:status :set, :value 4}) 1 1)
@@ -148,7 +148,7 @@
           {:status :empty}
           {:status :empty}
           {:status :empty}]))
-  
+
   (is (= (col sudoku-grid 8)
          [{:status :empty}
           {:status :empty}
@@ -176,6 +176,3 @@
                         (swap! cnt #(+ % 1)))) sudoku-grid)
            @cnt)
          51)))
-
-
-

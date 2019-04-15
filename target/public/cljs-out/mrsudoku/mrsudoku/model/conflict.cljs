@@ -12,15 +12,17 @@
 (defn values
   "Return the set of values of a vector or grid `cells`."
   [cells]
-  ;; Attention : réponse fausse
-  #{})
+  (disj (into #{} (map g/cell-value cells)) nil));; Attention : réponse fausse)
 
 (defn values-except
   "Return the set of values of a vector of cells, except the `except`-th."
   [cells except]
-  {:pre [(<= 1 except (count cells))]}
-  ;; Attention : réponse fausse
-  #{})
+  ;;un peu moche par contre...
+  (loop [s (map g/cell-value cells),co 1]
+    (if (and (seq s) (< co except))
+      (recur (rest s) (inc co))
+      (def elem (first s))))
+  (disj (values cells) elem))
 
 (defn mk-conflict [kind cx cy value]
   {:status :conflict
@@ -28,16 +30,15 @@
    :value value})
 
 (defn merge-conflict-kind
-  [kind1 kind2]
-  ;; Attention : réponse fausse
-  kind1)
+     [kind1 kind2] (if (= kind1 kind2) kind1 (let [res (if (keyword? kind2)(conj #{} kind2) kind2)] (loop [s (if (keyword? kind1)(conj #{} kind1)kind1),res res](if (seq s) (recur (rest s) (conj res (first s)))res)))))
+
 
 (defn merge-conflict [conflict1 conflict2]
-  ;; Attention : réponse fausse
-  conflict1)
+    (mk-conflict (merge-conflict-kind (get conflict1 :kind) (get conflict2 :kind)) 1 1 (get conflict1 :value))
+  )
 
 (defn merge-conflicts [& conflicts]
-  (apply (partial merge-with merge-conflict) conflicts)) 
+  (apply (partial merge-with merge-conflict) conflicts))
 
 (defn update-conflicts
   [conflict-kind cx cy value conflicts]
@@ -71,13 +72,20 @@
 
 
 
-(defn row-conflicts
-  "Returns a map of conflicts in a `row`."
-  [row cy]
-  ;; Attention : réponse fausse
-  {})
+  (defn row-conflicts
+    "Returns a map of conflicts in a `row`."
+    [row cy]
+    (loop [cx 1, cells (seq row), conflicts {}]
+      ;(println conflicts)
+      (if (seq cells)
+        (let [cell (first cells)]
+          (if-let [value (conflict-value row cy cell)]
+            (recur (+ cx 1) (rest cells) (update-conflicts :row cx cy value conflicts))
+            (recur (+ cx 1) (rest cells) conflicts)))
+        ;; no more cells
+        conflicts)))
 
-(defn rows-conflicts 
+(defn rows-conflicts
   "Returns a map of conflicts in all rows of `grid`"
   [grid]
   ;; Attention : réponse fausse
@@ -103,4 +111,3 @@
   (merge-conflicts (rows-conflicts grid)
                    (cols-conflicts grid)
                    (blocks-conflicts grid)))
-

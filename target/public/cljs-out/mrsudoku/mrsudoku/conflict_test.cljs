@@ -14,13 +14,13 @@
 
   (is (= (values (g/row sudoku-grid 1))
          #{5 3 7}))
-   
+
   (is (= (values (g/col sudoku-grid 1))
          #{5 6 8 4 7}))
 
   (is (= (values (g/block sudoku-grid 8))
          #{4 1 9 8}))
-     
+
   (is (= (values (g/row sudoku-grid 8))
          #{4 1 9 5}))
 
