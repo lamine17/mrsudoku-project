@@ -19,12 +19,12 @@
   [cells except]
   {:pre [(<= 1 except (count cells))]}
   ;;un peu moche par contre...
-(loop [s cells,co 0,res []]
-  (if (seq s)
-    (if (= co (dec except))
-      (recur (rest s) (inc co) res)
-      (recur (rest s) (inc co) (conj res (nth cells co))))
-    (values res))))
+ (loop [s cells,co 0,res []]
+   (if (seq s)
+     (if (= co (dec except))
+       (recur (rest s) (inc co) res)
+       (recur (rest s) (inc co) (conj res (nth cells co))))
+     (values res))))
 
 (defn mk-conflict [kind cx cy value]
   {:status :conflict
@@ -36,8 +36,8 @@
 
 
 (defn merge-conflict [conflict1 conflict2]
-    (mk-conflict (merge-conflict-kind (get conflict1 :kind) (get conflict2 :kind)) 1 1 (get conflict1 :value))
-  )
+    (mk-conflict (merge-conflict-kind (get conflict1 :kind) (get conflict2 :kind)) 1 1 (get conflict1 :value)))
+
 
 (defn merge-conflicts [& conflicts]
   (apply (partial merge-with merge-conflict) conflicts))
@@ -76,13 +76,13 @@
 (defn row-conflicts
    "Returns a map of conflicts in a `row`."
    [row cy]
-    (loop [cx 1, cells (seq row), conflicts {}]
-     (if (seq cells)
-       (let [cell (first cells)]
-         (if-let [value (conflict-value row cx cell)]
-           (recur (+ cx 1) (rest cells) (update-conflicts :row cx cy value conflicts))
-           (recur (+ cx 1) (rest cells) conflicts)))
-   conflicts)))
+   (loop [cx 1, cells (seq row), conflicts {}]
+    (if (seq cells)
+      (let [cell (first cells)]
+        (if-let [value (conflict-value row cx cell)]
+          (recur (+ cx 1) (rest cells) (update-conflicts :row cx cy value conflicts))
+          (recur (+ cx 1) (rest cells) conflicts)))
+     conflicts)))
 
 (defn rows-conflicts
   "Returns a map of conflicts in all rows of `grid`"
