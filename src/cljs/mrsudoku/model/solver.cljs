@@ -118,9 +118,21 @@
            (-> mgraph (g/add-vertex src)
                       (g/add-edge src dest)
                       (g/remove-edge dest src))) graph match))
+(def alldiff-doms-td {:v1 #{1 2 3} :v2 #{1 2 4 5} :v3 #{4 5 6} :v4 #{4 5 6} :v5 #{4 5 6}})
+(deftest graph-with-matching_test
+  (is (= (graph-with-matching {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}} (max-matching {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}})) {:x1 #{4 43}, :x2 #{}, :x3 #{}, 1 #{:x1}, 2 #{:x2}, 4 #{:x3}}))
+  (is (= (graph-with-matching alldiff-doms-td (max-matching alldiff-doms-td)) {:v1 #{1 2} 3 #{:v1} :v2 #{2 4 5} 1 #{:v2} :v3 #{4 5 6} :v4 #{4 5 6} :v5 #{4 5 6}})))
 
-(deftest graph-with-matching_test)
-
+(defn doms-from-sccomp [variables comp]
+  (if (= (count comp)1)
+    (if (contains? variables (first comp))
+     {(first comp) #{}}
+     {})
+    (let [vars (clojure.set/select #(contains? variables %) comp) values (clojure.set/difference comp vars)]
+     (zipmap vars (repeat values)))))
+(deftest doms-from-sccomp_test
+  (is (=)))
+(doms-from-sccomp (into #{} (keys alldiff-doms-td)) (compute-scc alldiff-doms-td))
 
 (defn dfs
   "Depth-First Search algorithm"
@@ -186,14 +198,14 @@
 
 (deftest inv-edges_test
   (is (= (inv-edges :A #{:B :C :D}) {:D #{:A}, :B #{:A}, :C #{:A}})))
-;;essential function
+  ;;essential function
 (defn transpose
   "transpose a graph..."
-   [graph]
+  [graph]
   (loop [ks (keys graph),res {}]
     (if (seq ks)
-      (recur (rest ks) (merge-edges res (inv-edges (first ks) ((first ks) graph))))
-      (sinks res (keys graph)))))
+     (recur (rest ks) (merge-edges res (inv-edges (first ks) ((first ks) graph))))
+     (sinks res (keys graph)))))
 
 (deftest transpose_test
   (is (= (transpose mygraph) {:A #{}, :B #{:A}, :C #{:A :B :E}, :D #{:C}, :E #{:D}, :F #{:A :H}, :G #{:F}, :H #{:F :G}, :I #{:G :H}})))
@@ -207,6 +219,7 @@
         (let [[comp visited'] (dfs-post t-graph (first s) conj #{} visited)]
           (recur (rest s) visited' (conj res comp))))
       res))))
+
 (deftest compute-scc_test
   (is (= (compute-scc mygraph) [#{:A} #{:B} #{:C :D :E} #{:F :G :H} #{:I}])))
 
