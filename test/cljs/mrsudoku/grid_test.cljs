@@ -33,7 +33,7 @@
          {:status :init, :value 2}))
 
   (is (= (cell sudoku-grid 9 9)
-      {:status :init, :value 9})))
+       {:status :init, :value 9})))
 
 (deftest change-cell-test
   (is (= (cell (change-cell sudoku-grid 1 1 {:status :set, :value 4}) 1 1)
@@ -73,11 +73,11 @@
          [[1 [1 1]] [2 [2 1]] [3 [3 1]] [4 [1 2]] [5 [2 2]] [6 [3 2]] [7 [1 3]] [8 [2 3]] [9 [3 3]]]))
 
   (is (= (reduce-block (fn [acc index cx cy cell]
-                 (conj acc (cell-value cell))) [] (block sudoku-grid 1) 1)
+                        (conj acc (cell-value cell))) [] (block sudoku-grid 1) 1)
          [5 3 nil 6 nil nil nil 9 8]))
 
   (is (= (reduce-block (fn [acc index cx cy cell]
-                 (conj acc [cx,cy])) [] (block sudoku-grid 8) 8)
+                        (conj acc [cx,cy])) [] (block sudoku-grid 8) 8)
          [[4 7] [5 7] [6 7] [4 8] [5 8] [6 8] [4 9] [5 9] [6 9]])))
 
 
@@ -176,3 +176,14 @@
                         (swap! cnt #(+ % 1)))) sudoku-grid)
            @cnt)
          51)))
+
+(deftest add-vertex-test
+  (is (= (add-vertex {:v1 #{1 2 3}} :v2) {:v1 #{1 2 3}, :v2 #{}})))
+
+(deftest add-edge-test
+  (is (= (add-edge {:v1 #{1 2 3}, :v2 #{}} :v2 5) {:v1 #{1 2 3}, :v2 #{5}}))
+  (is (= (add-edge {:v1 #{1 2 3}, :v2 #{}} :v1 2) {:v1 #{1 2 3}, :v2 #{}})))
+
+(deftest remove-edge-test
+  (is (= (remove-edge {:v1 #{1 2 3}, :v2 #{}} :v1 3) {:v1 #{1 2}, :v2 #{}}))
+  (is (= (remove-edge {:v1 #{1 2 3}, :v2 #{}} :v2 5) {:v1 #{1 2 3}, :v2 #{}})))

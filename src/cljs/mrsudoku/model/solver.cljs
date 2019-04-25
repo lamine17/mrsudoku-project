@@ -49,7 +49,7 @@
      (g/mk-cell 4) (g/mk-cell) (g/mk-cell)
      (g/mk-cell 7) (g/mk-cell) (g/mk-cell)]
     [(g/mk-cell) (g/mk-cell 6) (g/mk-cell)
-     (g/mk-cell 8) (g/mk-cell) (g/mk-ceintll 3)
+     (g/mk-cell 8) (g/mk-cell) (g/mk-cell 3)
      (g/mk-cell) (g/mk-cell 2) (g/mk-cell)]
     [(g/mk-cell) (g/mk-cell) (g/mk-cell 3)
      (g/mk-cell) (g/mk-cell) (g/mk-cell 1)
@@ -66,21 +66,22 @@
      (g/mk-cell) (g/mk-cell 7) (g/mk-cell 9)]]])
 (to_var_block grid 3)
 ;;A ecrire fonction de parcourt des dimensions (block - ligne - colonne)
-
 (defn augment
   "take a graph, a start summit, a set of visited summits and a match and return a flag indicated if the augment succeed or not"
    [graph src visited match]
   (loop [dests (get graph src),visited visited]
     (if (seq dests)
+     (if (visited (first dests))
+       (recur (rest dests) visited)
       (if-let [old-src (get match (first dests))]
-       (let [[found,visited',match'] (augment graph old-src (conj visited (first dests)) match)]
-        (if found
-          [true ,visited',(assoc match' (first dests) src)]
-          ;;found==false
-          (recur (rest dests) visited')))
-      ;;no match
-       [true,(conj visited (first dests)),(assoc match (first dests) src)])
-      [false,visited,match])))
+              (let [[found,visited',match'] (augment graph old-src (conj visited (first dests)) match)]
+               (if found
+                 [true ,visited',(assoc match' (first dests) src)]
+                 ;;found==false
+                 (recur (rest dests) visited')))
+        ;;no match
+              [true,(conj visited (first dests)),(assoc match (first dests) src)]))
+     [false,visited,match])))
 
 (deftest augment_tests
  (is (= (augment {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}} :x1 #{} {}) [true,#{1},{1 :x1}]))
@@ -95,6 +96,8 @@
         (recur (rest summits) visited' match'))
      match)))
 
+
+
 (deftest match-matching_tests
   (is (= (max-matching {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}}) {1 :x1, 2 :x2,4 :x3})))
 ;;a confirmer...
@@ -102,6 +105,22 @@
           ([graph vert f init] (first (dfs-pre graph vert f init #{})))
           ([graph vert f init visited] (if (visited vert) [init visited] (reduce (fn [[res,visited] v] (if (visited v) [res,visited] (dfs-pre graph v f (f res v) (conj visited v))))
                                                                           [(f init vert),#{vert}] (get graph vert))))))
+
+(defn complete-matching? [vars match]
+  (= (count vars) (count match)))
+
+(deftest complete-matching?_test
+  (is (= (complete-matching? (into #{} (keys {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}})) (max-matching {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}})) true))
+  (is (= (complete-matching? (into #{} (keys {:x1 #{1,4,43}, :x2 #{2}, :x3 #{2}})) (max-matching {:x1 #{1,4,43}, :x2 #{2}, :x3 #{2}})) false)))
+
+(defn graph-with-matching [graph match]
+  (reduce (fn [mgraph [src dest]]
+           (-> mgraph (g/add-vertex src)
+                      (g/add-edge src dest)
+                      (g/remove-edge dest src))) graph match))
+
+(deftest graph-with-matching_test)
+
 
 (defn dfs
   "Depth-First Search algorithm"
@@ -191,7 +210,7 @@
 (deftest compute-scc_test
   (is (= (compute-scc mygraph) [#{:A} #{:B} #{:C :D :E} #{:F :G :H} #{:I}])))
 
-
+(compute-scc (to_var_block grid 3))
 
 (defn solve
   "Solve the sudoku `grid` by returing a full solved grid,
