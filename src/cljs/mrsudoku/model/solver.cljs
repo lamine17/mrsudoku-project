@@ -83,10 +83,35 @@
               [true,(conj visited (first dests)),(assoc match (first dests) src)]))
      [false,visited,match])))
 
+
+(defn augment2
+  "take a graph, a start summit, a set of visited summits and a match and return a flag indicated if the augment succeed or not"
+   [graph src visited match just-visited]
+  (loop [dests (get graph src),visited visited]
+    (if (seq dests)
+     (if (just-visited (first dests))
+       (recur (rest dests) visited)
+      (if-let [old-src (get match (first dests))]
+              (let [[found,visited',match'] (augment2 graph old-src (conj visited (first dests)) match (conj just-visited (first dests)))]
+               (if found
+                 [true ,visited',(assoc match' (first dests) src)]
+                 ;;found==false
+                 (recur (rest dests) visited')))
+        ;;no match
+              [true,(conj visited (first dests)),(assoc match (first dests) src)]))
+     [false,visited,match])))
+
+
+
+
+
 (deftest augment_tests
  (is (= (augment {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}} :x1 #{} {}) [true,#{1},{1 :x1}]))
  (is (= (augment {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}} :x2 #{1} {1 :x1}) [true #{1 2} {1 :x1, 2 :x2}]))
  (is (= (augment {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}} :x3 #{1 2} {1 :x1, 2 :x2}) [true #{1 2 4} {1 :x1, 2 :x2,4 :x3}])))
+(augment2 {:x1 #{2 1 3} :x2 #{2 1} :x3 #{2 1}} :x1 #{} {} #{})
+(augment2 {:x1 #{2 1 3} :x2 #{2 1} :x3 #{2 1}} :x2 #{1} {1 :x1} #{})
+(augment2 {:x1 #{2 1 3} :x2 #{2 1} :x3 #{2 1}} :x3 #{1 2} {1 :x1, 2 :x2} #{})
 
 ;;essential function
 (defn max-matching [graph]
@@ -118,21 +143,66 @@
            (-> mgraph (g/add-vertex src)
                       (g/add-edge src dest)
                       (g/remove-edge dest src))) graph match))
-(def alldiff-doms-td {:v1 #{1 2 3} :v2 #{1 2 4 5} :v3 #{4 5 6} :v4 #{4 5 6} :v5 #{4 5 6}})
+(def alldiff-doms-td {:v1 #{1} :v2 #{2} :v3 #{5} :v4 #{4} :v5 #{6}})
+;;(def alldiff-doms-td {:v1 #{1 3 2} :v2 #{1 2 4 5} :v3 #{4 6 5} :v4 #{4 5 6} :v5 #{4 5 6}})
 (deftest graph-with-matching_test
   (is (= (graph-with-matching {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}} (max-matching {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}})) {:x1 #{4 43}, :x2 #{}, :x3 #{}, 1 #{:x1}, 2 #{:x2}, 4 #{:x3}}))
-  (is (= (graph-with-matching alldiff-doms-td (max-matching alldiff-doms-td)) {:v1 #{1 2} 3 #{:v1} :v2 #{2 4 5} 1 #{:v2} :v3 #{4 5 6} :v4 #{4 5 6} :v5 #{4 5 6}})))
+  (is (= (graph-with-matching alldiff-doms-td (max-matching alldiff-doms-td)) {:v1 #{1 2} 3 #{:v1} :v2 #{2 4 5} 1 #{:v2} :v3 #{4 5 6} :v4 #{4 5 6} :v5 #{4 5 6}})));;ATTENTION C'EST FAUX
 
 (defn doms-from-sccomp [variables comp]
   (if (= (count comp)1)
     (if (contains? variables (first comp))
      {(first comp) #{}}
      {})
-    (let [vars (clojure.set/select #(contains? variables %) comp) values (clojure.set/difference comp vars)]
+    (let [vars (clojure.set/select #(contains? variables %) comp), values (clojure.set/difference comp vars)]
      (zipmap vars (repeat values)))))
+
+(def scc1 (compute-scc mygraph))
 (deftest doms-from-sccomp_test
   (is (=)))
-(doms-from-sccomp (into #{} (keys alldiff-doms-td)) (compute-scc alldiff-doms-td))
+(doms-from-sccomp (into #{} (keys alldiff-doms-td)) (compute-scc (graph-with-matching alldiff-doms-td (max-matching alldiff-doms-td))))
+(defn isolated-values [variables scc]
+  (into #{} (map first (filter #(and (= (count %)1) (not (variables (first %)))))scc)))
+
+(deftest isolated-values_test
+  (is (= (isolated-values (into #{} (keys alldiff-doms-td))))));;non terminer
+
+(defn values-known-by [doms value]
+  (reduce (fn [res [v values]]
+           (if (contains? values value)
+            (conj res v)
+            res)) #{} doms))
+
+(deftest values-known-by_test
+  (is (= (values-known-by alldiff-doms-td 1) #{:v1 :v2}))
+  (is (= (values-known-by alldiff-doms-td 4) #{:v2 :v3 :v4 :v5})))
+
+(defn add-value [doms vs value]
+  (into doms (map (fn [var] (update doms var #(conj % value))vs))))
+
+(deftest add-values_test
+  (is (= ())))
+
+(defn access [doms scc]
+  (let [scc-doms (doms-from-sccomp (into #{} (keys doms)) scc) isolated (isolated-values (into #{} (keys doms)) scc)]
+    (reduce (fn [doms' value]
+             (add-value doms' (values-known-by doms value) value))
+            scc-doms
+            isolated)))
+
+(access alldiff-doms-td (compute-scc alldiff-doms-td))
+
+(defn alldiff
+  "simplify the 'doms' for the all-different constraint,returns nil if not satisfiable"
+  [doms]
+  (let [match (max-matching doms)]
+   (if (complete-matching? doms match)
+    (let [scc (compute-scc (graph-with-matching doms match))]
+     (access doms scc))
+    ;;incomlet
+    nil)))
+(deftest alldiff_test
+  (is (= (alldiff alldiff-doms-td) {:v1 #{1 2 3} :v2 #{1 2} :v3 #{4 6 5} :v4 #{4 5 6} :v5 #{4 5 6}})))
 
 (defn dfs
   "Depth-First Search algorithm"
@@ -197,8 +267,10 @@
   (zipmap dests (repeat #{src})))
 
 (deftest inv-edges_test
-  (is (= (inv-edges :A #{:B :C :D}) {:D #{:A}, :B #{:A}, :C #{:A}})))
+  (is (= (inv-edges :A #{:B :C :D}) {:D #{:A}, :B #{:A}, :C #{:A}}))
+  (is (= (inv-edges :A #{}) {})))
   ;;essential function
+
 (defn transpose
   "transpose a graph..."
   [graph]
@@ -222,6 +294,7 @@
 
 (deftest compute-scc_test
   (is (= (compute-scc mygraph) [#{:A} #{:B} #{:C :D :E} #{:F :G :H} #{:I}])))
+
 
 (compute-scc (to_var_block grid 3))
 
