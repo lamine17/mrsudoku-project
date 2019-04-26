@@ -172,7 +172,6 @@
 
 (defn isolated-values [variables scc]
   (into #{} (map first (filter #(and (= (count %) 1) (not (variables (first %))))scc))))
-(def scc1 (compute-scc (graph-with-matching alldiff-doms-td (max-matching alldiff-doms-td))))
 (deftest isolated-values_test
   (is (=(isolated-values (into #{} (keys alldiff-doms-td)) scc1) #{1 2 3})))
 
@@ -215,7 +214,7 @@
      (access doms scc))
     ;;incomlet
     nil)))
-    
+
 (deftest alldiff_test
   (is (= (alldiff alldiff-doms-td) {:v1 #{1 2 3} :v2 #{1 2} :v3 #{4 6 5} :v4 #{4 5 6} :v5 #{4 5 6}})))
 
@@ -313,9 +312,16 @@
 
 (compute-scc (to_var_block grid 3))
 
+
+(defn solve1 [grid]
+  (max-matching (to_var_block grid 9))
+  (max-matching (to_var_block grid 8))
+  (max-matching (to_var_block grid 7))
+  (alldiff (to_var_block grid 9)))
+(solve1 grid)
 (defn solve
   "Solve the sudoku `grid` by returing a full solved grid,
  or `nil` if the solver fails."
   [grid]
-  ;; A compléter
-  nil)
+  (def grid (g/change-cell grid 5 5 (g/mk-cell 8)))
+  (g/change-cell grid 3 1 (g/mk-cell 8)))

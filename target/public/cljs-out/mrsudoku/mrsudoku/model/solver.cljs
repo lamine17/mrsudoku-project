@@ -49,7 +49,7 @@
      (g/mk-cell 4) (g/mk-cell) (g/mk-cell)
      (g/mk-cell 7) (g/mk-cell) (g/mk-cell)]
     [(g/mk-cell) (g/mk-cell 6) (g/mk-cell)
-     (g/mk-cell 8) (g/mk-cell) (g/mk-ceintll 3)
+     (g/mk-cell 8) (g/mk-cell) (g/mk-cell 3)
      (g/mk-cell) (g/mk-cell 2) (g/mk-cell)]
     [(g/mk-cell) (g/mk-cell) (g/mk-cell 3)
      (g/mk-cell) (g/mk-cell) (g/mk-cell 1)
@@ -66,25 +66,46 @@
      (g/mk-cell) (g/mk-cell 7) (g/mk-cell 9)]]])
 (to_var_block grid 3)
 ;;A ecrire fonction de parcourt des dimensions (block - ligne - colonne)
+(comment (defn augment
+          "take a graph, a start summit, a set of visited summits and a match and return a flag indicated if the augment succeed or not"
+          [graph src visited match]
+          (loop [dests (get graph src),visited visited]
+            (if (seq dests)
+             (if (visited (first dests))
+               (recur (rest dests) visited)
+              (if-let [old-src (get match (first dests))]
+                      (let [[found,visited',match'] (augment graph old-src (conj visited (first dests)) match)]
+                       (if found
+                         [true ,visited',(assoc match' (first dests) src)]
+                         ;;found==false
+                         (recur (rest dests) visited')))
+                ;;no match
+                      [true,(conj visited (first dests)),(assoc match (first dests) src)]))
+             [false,visited,match]))))
+
 
 (defn augment
   "take a graph, a start summit, a set of visited summits and a match and return a flag indicated if the augment succeed or not"
-   [graph src visited match]
-  (loop [dests (get graph src),visited visited]
+  ([graph src visited match] (augment graph src visited match #{}))
+  ([graph src visited match just-visited]
+   (loop [dests (get graph src),visited visited]
     (if (seq dests)
+     (if (just-visited (first dests))
+       (recur (rest dests) visited)
       (if-let [old-src (get match (first dests))]
-       (let [[found,visited',match'] (augment graph old-src (conj visited (first dests)) match)]
-        (if found
-          [true ,visited',(assoc match' (first dests) src)]
-          ;;found==false
-          (recur (rest dests) visited')))
-      ;;no match
-       [true,(conj visited (first dests)),(assoc match (first dests) src)])
-      [false,visited,match])))
+              (let [[found,visited',match'] (augment graph old-src (conj visited (first dests)) match (conj just-visited (first dests)))]
+               (if found
+                 [true ,visited',(assoc match' (first dests) src)]
+                 ;;found==false
+                 (recur (rest dests) visited')))
+        ;;no match
+              [true,(conj visited (first dests)),(assoc match (first dests) src)]))
+     [false,visited,match]))))
+
 
 (deftest augment_tests
  (is (= (augment {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}} :x1 #{} {}) [true,#{1},{1 :x1}]))
- (is (= (augment {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}} :x2 #{1} {1 :x1}) [true #{1 2} {1 :x1, 2 :x2}]))
+ (is (= (augment {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}} :x2 #{1} {1 :x1} ) [true #{1 2} {1 :x1, 2 :x2}]))
  (is (= (augment {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}} :x3 #{1 2} {1 :x1, 2 :x2}) [true #{1 2 4} {1 :x1, 2 :x2,4 :x3}])))
 
 ;;essential function
@@ -95,6 +116,8 @@
         (recur (rest summits) visited' match'))
      match)))
 
+
+
 (deftest match-matching_tests
   (is (= (max-matching {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}}) {1 :x1, 2 :x2,4 :x3})))
 ;;a confirmer...
@@ -102,6 +125,98 @@
           ([graph vert f init] (first (dfs-pre graph vert f init #{})))
           ([graph vert f init visited] (if (visited vert) [init visited] (reduce (fn [[res,visited] v] (if (visited v) [res,visited] (dfs-pre graph v f (f res v) (conj visited v))))
                                                                           [(f init vert),#{vert}] (get graph vert))))))
+
+(defn complete-matching? [vars match]
+  (= (count vars) (count match)))
+
+(deftest complete-matching?_test
+  (is (= (complete-matching? (into #{} (keys {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}})) (max-matching {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}})) true))
+  (is (= (complete-matching? (into #{} (keys {:x1 #{1,4,43}, :x2 #{2}, :x3 #{2}})) (max-matching {:x1 #{1,4,43}, :x2 #{2}, :x3 #{2}})) false)))
+
+(defn graph-with-matching [graph match]
+  (reduce (fn [mgraph [src dest]]
+           (-> mgraph (g/add-vertex src)
+                      (g/add-edge src dest)
+                      (g/remove-edge dest src))) graph match))
+;;(def alldiff-doms-td {:v1 #{1} :v2 #{2} :v3 #{5} :v4 #{4} :v5 #{6}})
+(def alldiff-doms-td {:v1 #{1 3 2} :v2 #{1 2 4 5} :v3 #{4 6 5} :v4 #{4 5 6} :v5 #{4 5 6}})
+(deftest graph-with-matching_test
+  (is (= (graph-with-matching {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}} (max-matching {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}})) {:x1 #{4 43}, :x2 #{}, :x3 #{}, 1 #{:x1}, 2 #{:x2}, 4 #{:x3}}))
+  (is (= (graph-with-matching alldiff-doms-td (max-matching alldiff-doms-td)) {:v2 #{4 2 5}, 1 #{:v2}, :v5 #{6 5}, :v1 #{1 2}, 4 #{:v5}, 6 #{:v4}, 3 #{:v1}, :v4 #{4 5}, :v3 #{4 6}, 5 #{:v3}})));;ATTENTION C'EST FAUX
+
+(defn doms-from-sccomp [variables comp]
+  (if (= (count comp)1)
+    (if (contains? variables (first comp))
+     {(first comp) #{}}
+     {})
+    (let [vars (clojure.set/select #(contains? variables %) comp), values (clojure.set/difference comp vars)]
+     (zipmap vars (repeat values)))))
+
+(defn doms-from-scc [vars scc]
+  (loop [scc scc,res {}]
+    (if (seq scc)
+     (recur (rest scc) (merge res (doms-from-sccomp vars (first scc))))
+     res)))
+
+(doms-from-sccomp (into #{} (keys alldiff-doms-td)) #{4})
+(deftest doms-from-sccomp_test
+  (is (= (doms-from-sccomp (into #{} (keys alldiff-doms-td)) #{:v5 4 6 :v4 :v3 5}) {:v5 #{4 6 5}, :v4 #{4 6 5}, :v3 #{4 6 5}}))
+  (is (= (doms-from-sccomp (into #{} (keys alldiff-doms-td)) #{4}) {})))
+
+(deftest doms-from-scc_test
+  (def scc1 (compute-scc (graph-with-matching alldiff-doms-td (max-matching alldiff-doms-td))))
+  (is (= (doms-from-scc (into #{} (keys alldiff-doms-td)) scc1) {:v1 #{}, :v2 #{}, :v5 #{4 6 5}, :v4 #{4 6 5}, :v3 #{4 6 5}})))
+
+
+(doms-from-scc (into #{} (keys alldiff-doms-td)) scc1)
+
+(defn isolated-values [variables scc]
+  (into #{} (map first (filter #(and (= (count %) 1) (not (variables (first %))))scc))))
+(deftest isolated-values_test
+  (is (=(isolated-values (into #{} (keys alldiff-doms-td)) scc1) #{1 2 3})))
+
+(defn values-known-by [doms value]
+  (reduce (fn [res [v values]]
+           (if (contains? values value)
+            (conj res v)
+            res)) #{} doms))
+
+(deftest values-known-by_test
+  (is (= (values-known-by alldiff-doms-td 1) #{:v1 :v2}))
+  (is (= (values-known-by alldiff-doms-td 4) #{:v2 :v3 :v4 :v5})))
+
+;;ne marche pas apparement remplacer par un simple loop recur
+(comment (defn add-value [doms vs value]
+          (into doms (map (fn [var] (update doms var #(conj % value)))vs))))
+
+(defn add-value [doms vs value]
+  (loop [s vs,res doms]
+    (if (seq s)
+     (recur (rest s) (update res (first s) #(conj % value)))
+     res)))
+
+(defn access [doms scc]
+  (let [scc-doms (doms-from-scc (into #{} (keys doms)) scc) isolated (isolated-values (into #{} (keys doms)) scc)]
+    (reduce (fn [doms' value]
+             (do (println "doms' == " doms' " value == " value  "known " (values-known-by doms value))(add-value doms' (values-known-by doms value) value)))
+            scc-doms
+            isolated)))
+(deftest access_test
+  (is (= (access alldiff-doms-td scc1) {:v1 #{1 3 2}, :v2 #{1 2}, :v5 #{4 6 5}, :v4 #{4 6 5}, :v3 #{4 6 5}})))
+
+
+(defn alldiff
+  "simplify the 'doms' for the all-different constraint,returns nil if not satisfiable"
+  [doms]
+  (let [match (max-matching doms)]
+   (if (complete-matching? doms match)
+    (let [scc (compute-scc (graph-with-matching doms match))]
+     (access doms scc))
+    ;;incomlet
+    nil)))
+
+(deftest alldiff_test
+  (is (= (alldiff alldiff-doms-td) {:v1 #{1 2 3} :v2 #{1 2} :v3 #{4 6 5} :v4 #{4 5 6} :v5 #{4 5 6}})))
 
 (defn dfs
   "Depth-First Search algorithm"
@@ -166,15 +281,17 @@
   (zipmap dests (repeat #{src})))
 
 (deftest inv-edges_test
-  (is (= (inv-edges :A #{:B :C :D}) {:D #{:A}, :B #{:A}, :C #{:A}})))
-;;essential function
+  (is (= (inv-edges :A #{:B :C :D}) {:D #{:A}, :B #{:A}, :C #{:A}}))
+  (is (= (inv-edges :A #{}) {})))
+  ;;essential function
+
 (defn transpose
   "transpose a graph..."
-   [graph]
+  [graph]
   (loop [ks (keys graph),res {}]
     (if (seq ks)
-      (recur (rest ks) (merge-edges res (inv-edges (first ks) ((first ks) graph))))
-      (sinks res (keys graph)))))
+       (recur (rest ks) (merge-edges res (inv-edges (first ks) (get graph (first ks)))))
+       (sinks res (keys graph)))))
 
 (deftest transpose_test
   (is (= (transpose mygraph) {:A #{}, :B #{:A}, :C #{:A :B :E}, :D #{:C}, :E #{:D}, :F #{:A :H}, :G #{:F}, :H #{:F :G}, :I #{:G :H}})))
@@ -188,14 +305,23 @@
         (let [[comp visited'] (dfs-post t-graph (first s) conj #{} visited)]
           (recur (rest s) visited' (conj res comp))))
       res))))
+
 (deftest compute-scc_test
   (is (= (compute-scc mygraph) [#{:A} #{:B} #{:C :D :E} #{:F :G :H} #{:I}])))
 
 
+(compute-scc (to_var_block grid 3))
 
+
+(defn solve1 [grid]
+  (max-matching (to_var_block grid 9))
+  (max-matching (to_var_block grid 8))
+  (max-matching (to_var_block grid 7))
+  (alldiff (to_var_block grid 9)))
+(solve1 grid)
 (defn solve
   "Solve the sudoku `grid` by returing a full solved grid,
  or `nil` if the solver fails."
   [grid]
-  ;; A compléter
-  nil)
+  (def grid (g/change-cell grid 5 5 (g/mk-cell 8)))
+  (g/change-cell grid 3 1 (g/mk-cell 8)))
