@@ -236,5 +236,22 @@ cljs.core.println.call(null,mrsudoku.model.grid.grid__GT_str.call(null,grid));
 
 return mrsudoku.model.conflict.merge_conflicts.call(null,mrsudoku.model.conflict.rows_conflicts.call(null,grid),mrsudoku.model.conflict.cols_conflicts.call(null,grid),mrsudoku.model.conflict.blocks_conflicts.call(null,grid));
 });
+mrsudoku.model.conflict.grid_resolu_QMARK_ = (function mrsudoku$model$conflict$grid_resolu_QMARK_(grid){
+var num = (1);
+while(true){
+if(cljs.core._EQ_.call(null,num,(10))){
+return true;
+} else {
+if(cljs.core._EQ_.call(null,cljs.core.count.call(null,mrsudoku.model.conflict.values.call(null,mrsudoku.model.grid.block.call(null,grid,num))),(9))){
+var G__8603 = (num + (1));
+num = G__8603;
+continue;
+} else {
+return false;
+}
+}
+break;
+}
+});
 
 //# sourceMappingURL=conflict.js.map

@@ -92,6 +92,7 @@ goog.addDependency("../mrsudoku/runner.js", ['mrsudoku.runner'], ['doo.runner', 
 goog.addDependency("../cljs_test_display/favicon.js", ['cljs_test_display.favicon'], ['goog.dom', 'cljs.core', 'goog.object', 'clojure.string']);
 goog.addDependency("../cljs_test_display/notify.js", ['cljs_test_display.notify'], ['cljs.core', 'goog.object', 'cljs_test_display.favicon']);
 goog.addDependency("../cljs_test_display/core.js", ['cljs_test_display.core'], ['goog.dom', 'goog.dom.classlist', 'cljs_test_display.notify', 'cljs.core', 'cljs.test', 'goog.events.EventType', 'cljs_test_display.favicon', 'clojure.string', 'goog.events.KeyCodes', 'goog.events']);
+goog.addDependency("../mrsudoku/solver_test.js", ['mrsudoku.solver_test'], ['mrsudoku.model.conflict', 'mrsudoku.model.solver', 'cljs.core', 'cljs.test', 'mrsudoku.model.grid']);
 goog.addDependency("../mrsudoku/conflict_test.js", ['mrsudoku.conflict_test'], ['mrsudoku.model.conflict', 'cljs.core', 'cljs.test', 'mrsudoku.model.grid']);
 goog.addDependency("../mrsudoku/grid_test.js", ['mrsudoku.grid_test'], ['cljs.core', 'cljs.test', 'mrsudoku.model.grid']);
 goog.addDependency("../figwheel/main/generated/mrsudoku_auto_test_runner.js", ['figwheel.main.generated.mrsudoku_auto_test_runner'], ['mrsudoku.conflict_test', 'mrsudoku.model.solver', 'cljs.core', 'cljs.test', 'mrsudoku.grid_test', 'cljs_test_display.core']);

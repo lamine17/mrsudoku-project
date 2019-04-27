@@ -110,3 +110,11 @@
   (merge-conflicts (rows-conflicts grid)
                    (cols-conflicts grid)
                    (blocks-conflicts grid)))
+
+(defn grid-resolu? [grid]
+  (loop [num 1]
+    (if (= num 10)
+     true
+     (if (= (count (values (g/block grid num))) 9)
+      (recur (inc num))
+      false))))

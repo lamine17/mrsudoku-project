@@ -1,6 +1,6 @@
 (ns mrsudoku.model.grid
   (:require [clojure.string :as string]
-            [mrsudoku.utils :refer [concatv]]))
+    [mrsudoku.utils :refer [concatv]]))
 
 (defn mk-cell
   "Create a new cell."

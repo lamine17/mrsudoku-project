@@ -1,0 +1,20 @@
+(defn fix-singleton [grid index doms]
+  (loop [s doms,mygrid grid]
+    (if (seq s)
+     (if (= (count (val (first s))) 1)
+       (let [var-num (Integer. (subs (str (key (first s))) 2))]
+        (let [offset-y (inc (int (/ (dec var-num) 3))) , y (* (int (/ (dec index) 3)) 3), offset-x (inc (int (mod (dec var-num) 3))) ,x (* (int (mod (dec index) 3)) 3)]
+         (println "x " (+ x offset-x) " y " (+ y offset-y) " val " (first (val (first s))))
+         (recur (rest s) (g/change-cell mygrid (+ x offset-x) (+ y offset-y) (g/mk-cell (first (val (first s))))))))
+       ;;pas singleton
+      (recur (rest s) mygrid))
+     mygrid)))
+
+(defn solver5 [grid]
+  (loop [mygrid grid,index 1,finish (g/grid-resolu? grid)]
+   (if-not finish
+     (let [alldiff-doms (alldiff (to_var_block mygrid index))]
+      (if alldiff-doms
+        (recur (fix-singleton mygrid index alldiff-doms) (mod (inc index) 9) (g/grid-resolu? mygrid))
+        nil))
+     mygrid)))
