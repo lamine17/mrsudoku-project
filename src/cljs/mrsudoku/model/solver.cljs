@@ -334,6 +334,7 @@
   (alldiff (to_var_block grid 2))
   (alldiff (to_var_block grid 3))
  (alldiff (to_var_block grid 4)))
+ ;;Suite a un probleme de compqtibiliterr entre javaScript et clojure Integer on a redefinie la methode parse pour un chiffre entre 1 et 9 ...
 (defn manuel-parse [str]
   (cond
              (== (compare str "1") 0) 1
@@ -358,6 +359,18 @@
               (recur (rest s) mygrid))
              mygrid)))
 
+(defn fix-singleton2 [grid index doms]
+  (loop [s doms,mygrid grid,fixed false];;fixed pour indique que fix-singleton a fixed au moins une valeur dans la grille.
+    (if (seq s)
+     (if (= (count (val (first s))) 1)
+       (let [var-num (manuel-parse (subs (str (key (first s))) 2))]
+        (let [offset-y (inc (int (/ (dec var-num) 3))) , y (* (int (/ (dec index) 3)) 3), offset-x (inc (int (mod (dec var-num) 3))) ,x (* (int (mod (dec index) 3)) 3)]
+         (println "x " (+ x offset-x) " y " (+ y offset-y) " val " (first (val (first s))))
+         (recur (rest s) (g/change-cell mygrid (+ x offset-x) (+ y offset-y) (g/mk-cell (first (val (first s))))) true)))
+       ;;pas singleton
+      (recur (rest s) mygrid fixed))
+     [mygrid fixed])))
+
 (defn solver [grid]
           (loop [mygrid grid,index 1,finish (cfl/grid-resolu? grid)]
            (if-not finish
@@ -366,11 +379,166 @@
                 (recur (fix-singleton mygrid index alldiff-doms) (inc (mod index 9)) (cfl/grid-resolu? mygrid))
                 nil))
              mygrid)))
-;;(fix-singleton grid 9 (to_var_block grid 9))
+
+(defn solver2 [grid]
+         (loop [mygrid grid,index 1,fixed false]
+          (if (< index 10)
+            (let [alldiff-doms (alldiff (to_var_block mygrid index))]
+             (if alldiff-doms
+               (let [[newgrid,isfixed] (fix-singleton2 mygrid index alldiff-doms)]
+                (recur newgrid (inc index) (or fixed isfixed)))
+               [nil false]))
+           [mygrid fixed])))
+
+
+(defn strat-first [grid]
+  (loop [index 1]
+   (if (< index 10)
+     (let [alldiff-doms (alldiff (to_var_block grid index))]
+      (if (> (count alldiff-doms) 0)
+       [index (first alldiff-doms)]
+       (recur (inc index))))
+    [1 #{}])))
+(strat-first grid)
+(defn strat-best [grid]
+   (loop [index 1,myindex 1 best {:v1 (into #{} (take 10 (range 1 10)))}]
+    (if (< index 10)
+      (let [alldiff-doms (to_var_block grid index)]
+       (if (> (count alldiff-doms) 0)
+         (do (loop [s alldiff-doms,best2 (first alldiff-doms)]
+              (if (seq s)
+                (if (< (count (val (first s))) (count (val best2)))
+                  (recur (rest s) (first s))
+                  (recur (rest s) best2))
+                (def best2 best2)))
+             (recur (inc index) index best2))
+        (recur (inc index) myindex best)))
+     [myindex best])))
+;;(strat-best hardgrid)
+
+;;(deftest strat-first_test
+;;  (is (= (strat-first emptygrid) #{1 2 3 4 5 6 7 8 9})))
+
+(def hardgrid
+  [[;; row 1
+    [(g/mk-cell 8) (g/mk-cell) (g/mk-cell)
+     (g/mk-cell) (g/mk-cell) (g/mk-cell 3)
+     (g/mk-cell) (g/mk-cell 7) (g/mk-cell)]
+    [(g/mk-cell) (g/mk-cell) (g/mk-cell)
+     (g/mk-cell 6) (g/mk-cell) (g/mk-cell)
+     (g/mk-cell) (g/mk-cell 9) (g/mk-cell)]
+    [(g/mk-cell) (g/mk-cell) (g/mk-cell)
+     (g/mk-cell) (g/mk-cell) (g/mk-cell)
+     (g/mk-cell 2) (g/mk-cell) (g/mk-cell)] ],
+   [;; row 2
+    [(g/mk-cell) (g/mk-cell 5) (g/mk-cell)
+     (g/mk-cell) (g/mk-cell) (g/mk-cell)
+     (g/mk-cell) (g/mk-cell) (g/mk-cell)]
+    [(g/mk-cell) (g/mk-cell) (g/mk-cell 7)
+     (g/mk-cell) (g/mk-cell 4) (g/mk-cell 5)
+     (g/mk-cell 1) (g/mk-cell ) (g/mk-cell)]
+    [(g/mk-cell) (g/mk-cell) (g/mk-cell)
+     (g/mk-cell 7) (g/mk-cell) (g/mk-cell)
+     (g/mk-cell) (g/mk-cell 3) (g/mk-cell )]],
+   [;; row 3
+    [(g/mk-cell) (g/mk-cell ) (g/mk-cell 1)
+      (g/mk-cell) (g/mk-cell) (g/mk-cell 8)
+     (g/mk-cell) (g/mk-cell 9) (g/mk-cell)]
+    [(g/mk-cell) (g/mk-cell) (g/mk-cell)
+     (g/mk-cell 5) (g/mk-cell) (g/mk-cell)
+     (g/mk-cell) (g/mk-cell ) (g/mk-cell)]
+    [(g/mk-cell ) (g/mk-cell 6) (g/mk-cell 8)
+     (g/mk-cell) (g/mk-cell 1) (g/mk-cell)
+     (g/mk-cell 4) (g/mk-cell ) (g/mk-cell)]]])
+
+(def emptygrid
+  [[;; row 1
+    [(g/mk-cell ) (g/mk-cell) (g/mk-cell)
+     (g/mk-cell) (g/mk-cell) (g/mk-cell)
+     (g/mk-cell) (g/mk-cell ) (g/mk-cell)]
+    [(g/mk-cell) (g/mk-cell) (g/mk-cell)
+     (g/mk-cell ) (g/mk-cell) (g/mk-cell)
+     (g/mk-cell) (g/mk-cell ) (g/mk-cell)]
+    [(g/mk-cell) (g/mk-cell) (g/mk-cell)
+     (g/mk-cell) (g/mk-cell) (g/mk-cell)
+     (g/mk-cell ) (g/mk-cell) (g/mk-cell)] ],
+   [;; row 2
+    [(g/mk-cell) (g/mk-cell ) (g/mk-cell)
+     (g/mk-cell) (g/mk-cell) (g/mk-cell)
+     (g/mk-cell) (g/mk-cell) (g/mk-cell)]
+    [(g/mk-cell) (g/mk-cell) (g/mk-cell)
+     (g/mk-cell) (g/mk-cell ) (g/mk-cell)
+     (g/mk-cell ) (g/mk-cell ) (g/mk-cell)]
+    [(g/mk-cell) (g/mk-cell) (g/mk-cell)
+     (g/mk-cell ) (g/mk-cell) (g/mk-cell)
+     (g/mk-cell) (g/mk-cell ) (g/mk-cell )]],
+   [;; row 3
+    [(g/mk-cell) (g/mk-cell ) (g/mk-cell)
+      (g/mk-cell) (g/mk-cell) (g/mk-cell)
+     (g/mk-cell) (g/mk-cell ) (g/mk-cell)]
+    [(g/mk-cell) (g/mk-cell) (g/mk-cell)
+     (g/mk-cell ) (g/mk-cell) (g/mk-cell)
+     (g/mk-cell) (g/mk-cell ) (g/mk-cell)]
+    [(g/mk-cell ) (g/mk-cell ) (g/mk-cell)
+     (g/mk-cell) (g/mk-cell ) (g/mk-cell)
+     (g/mk-cell ) (g/mk-cell ) (g/mk-cell)]]])
+
+;;(second (fix-singleton2 emptygrid 1 (to_var_block emptygrid 1)))
+(defn fix-value [grid  index var val]
+  (let [var-num (manuel-parse (subs (str var) 2))]
+   (let [offset-y (inc (int (/ (dec var-num) 3))) , y (* (int (/ (dec index) 3)) 3), offset-x (inc (int (mod (dec var-num) 3))) ,x (* (int (mod (dec index) 3)) 3)]
+    (println "x " (+ x offset-x) " y " (+ y offset-y) " val " val)
+    (g/change-cell grid (+ x offset-x) (+ y offset-y) (g/mk-cell val)))))
+
+;(fix-value emptygrid 1 :v3 5)
+
+(defn solver3 [grid]
+  (loop [mygrid grid,finish (cfl/grid-resolu? grid),fixed true]
+    (if-not finish
+      (if fixed
+        (let [[grid' fixed'] (solver2 mygrid)]
+          (if (nil? grid')
+            nil
+            (recur grid' (cfl/grid-resolu? grid') fixed')))
+        (let [[index doms] (strat-best mygrid)]
+          (loop [s (second doms)]
+            (if (seq s)
+              (let [newgrid (solver3 (fix-value mygrid index (first doms) (first s)))]
+               (if (nil? newgrid)
+                 (recur (rest s))
+                 newgrid))
+             nil))))
+      mygrid)))
+
+(comment (defn solver4 [grid tour]
+           (loop [mygrid grid,finish (cfl/grid-resolu? grid),fixed true, t tour]
+             (if-not finish
+               (if fixed
+                 (let [[grid' fixed'] (solver2 mygrid)]
+                   (if (nil? grid')
+                     [nil t]
+                     (recur grid' (cfl/grid-resolu? grid') fixed' t)))
+                 (let [[index doms] (strat-best mygrid)]
+                   (loop [s (second doms)]
+                     (if (seq s)
+                       (let [[newgrid t] (solver4 (fix-value mygrid index (first doms) (first s)) t)]
+                        (if (nil? newgrid)
+                          (recur (rest s))
+                          [newgrid t]))
+                      [nil t]))))
+               (if t
+                 [nil false]
+                 [mygrid false])))))
+
+;;(solver3 emptygrid)
+
+;;(solver4 (fix-value emptygrid 1 :v1 3) true)
+
+;;(solver4 hardgrid true)
+
 
 (defn solve
   "Solve the sudoku `grid` by returing a full solved grid,
  or `nil` if the solver fails."
   [grid]
-  (solver grid)
- )
+  (first (solver4 hardgrid true)))
