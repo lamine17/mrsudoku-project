@@ -1,3 +1,25 @@
+```
+# lisez-moi
+```
+Bonjour messieurs,
+Vous trouverez dans le dossier source toutes les fonctions demandées ainsi que le solver du Sudoku.
+Il y a deux solvers dans le fichier Solver:
+solver-simple: Qui calcule la solution d'une grille simple (sans spéculer la solution)
+solver-cpx: Qui solve tous les types de grilles.
+Dans le deuxieme solver vous pouvez changer de strategie de solving:
+1- strat-first: qui utlise les valeurs de la premiere case libre (rapide mais peut-être mauvais dans certains cas)
+2- strat-best: qui parcourt toute la grille et prend les valeurs de la case qui a le moins de variable possible.
+
+Pour la question bonus (le generateur) un bouton est ajouté à l'interface graphique qui permet de génerer une grille de dificulté aleatoire.
+N'hésitez pas à nous contacter pour plus d'informations.
+Radi Zoubir 3802151
+Keita Lamine 3520295
+
+
+
+
+
+
 # mrsudoku
 
 Ce dépôt contient les sources du squelette pour le projet MrSudoku de l'UE 3I020 "programmation déclarative" de la licence d'informatique de Sorbonne Université.
