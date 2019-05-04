@@ -5,7 +5,10 @@
                                                block-row row row->str rows
                                                grid->str
                                                col
-                                               reduce-grid do-grid]]))
+                                               reduce-grid do-grid
+                                               add-vertex
+                                               add-edge
+                                               remove-edge]]))
 
 (deftest cell-value-test
   (is (= (cell-value {:status :init, :value 5}) 5))

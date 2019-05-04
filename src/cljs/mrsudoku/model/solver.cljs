@@ -116,10 +116,7 @@
      [false,visited,match]))))
 
 
-(deftest augment_tests
- (is (= (augment {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}} :x1 #{} {}) [true,#{1},{1 :x1}]))
- (is (= (augment {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}} :x2 #{1} {1 :x1} ) [true #{1 2} {1 :x1, 2 :x2}]))
- (is (= (augment {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}} :x3 #{1 2} {1 :x1, 2 :x2}) [true #{1 2 4} {1 :x1, 2 :x2,4 :x3}])))
+
 
 ;;essential function
 (defn max-matching [graph]
@@ -131,8 +128,7 @@
 
 
 
-(deftest match-matching_tests
-  (is (= (max-matching {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}}) {1 :x1, 2 :x2,4 :x3})))
+
 ;;a confirmer...
 (comment (defn dfs-pre
           ([graph vert f init] (first (dfs-pre graph vert f init #{})))
@@ -142,20 +138,14 @@
 (defn complete-matching? [vars match]
   (= (count vars) (count match)))
 
-(deftest complete-matching?_test
-  (is (= (complete-matching? (into #{} (keys {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}})) (max-matching {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}})) true))
-  (is (= (complete-matching? (into #{} (keys {:x1 #{1,4,43}, :x2 #{2}, :x3 #{2}})) (max-matching {:x1 #{1,4,43}, :x2 #{2}, :x3 #{2}})) false)))
+
 
 (defn graph-with-matching [graph match]
   (reduce (fn [mgraph [src dest]]
            (-> mgraph (g/add-vertex src)
                       (g/add-edge src dest)
                       (g/remove-edge dest src))) graph match))
-;;(def alldiff-doms-td {:v1 #{1} :v2 #{2} :v3 #{5} :v4 #{4} :v5 #{6}})
-(def alldiff-doms-td {:v1 #{1 3 2} :v2 #{1 2 4 5} :v3 #{4 6 5} :v4 #{4 5 6} :v5 #{4 5 6}})
-(deftest graph-with-matching_test
-  (is (= (graph-with-matching {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}} (max-matching {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}})) {:x1 #{4 43}, :x2 #{}, :x3 #{}, 1 #{:x1}, 2 #{:x2}, 4 #{:x3}}))
-  (is (= (graph-with-matching alldiff-doms-td (max-matching alldiff-doms-td)) {:v2 #{4 2 5}, 1 #{:v2}, :v5 #{6 5}, :v1 #{1 2}, 4 #{:v5}, 6 #{:v4}, 3 #{:v1}, :v4 #{4 5}, :v3 #{4 6}, 5 #{:v3}})));;ATTENTION C'EST FAUX
+
 
 (defn doms-from-sccomp [variables comp]
   (if (= (count comp)1)
@@ -171,9 +161,7 @@
      (recur (rest scc) (merge res (doms-from-sccomp vars (first scc))))
      res)))
 
-(deftest doms-from-sccomp_test
-  (is (= (doms-from-sccomp (into #{} (keys alldiff-doms-td)) #{:v5 4 6 :v4 :v3 5}) {:v5 #{4 6 5}, :v4 #{4 6 5}, :v3 #{4 6 5}}))
-  (is (= (doms-from-sccomp (into #{} (keys alldiff-doms-td)) #{4}) {})))
+
 
 (defn dfs
   "Depth-First Search algorithm"
@@ -186,10 +174,8 @@
         ;;no more child
                                   [res visited])))))
 
-(def mygraph {:A #{:F :B :C}, :B #{:C}, :C #{:D}, :D #{:E} :E #{:C}, :F #{:H :G}, :G #{:H :I}, :H #{:F :I}})
 
-(deftest dfs_test
-  (is (= (dfs mygraph :A conj #{}) #{:A :B :C :D :E :F :G :H :I})))
+
 
 (defn dfs-post
   ([graph vert f init] (first (dfs-post graph vert f init #{})))
@@ -201,8 +187,7 @@
               ;;no more child
                                   [(f res vert) visited])))))
 
-(deftest dfs-post_test
-  (is (= (dfs-post mygraph :A conj ()) '(:A :B :F :G :H :I :C :D :E))))
+
 
   ;;essential function
 (defn dfs-stack [graph]
@@ -213,8 +198,7 @@
     ;;no more verts
      stack)))
 
-(deftest dfs-stack_test
-  (is (= (dfs-stack mygraph) '(:A :B :C :D :E :F :G :H :I))))
+
 
 (defn merge-edges [edges1 edges2]
   (loop [s edges2,m edges1]
@@ -225,21 +209,17 @@
        (recur (rest s) (assoc m k v2))))
      m)))
 
-(deftest merge-edges_test
-  (is (= (merge-edges {:B #{:A}, :C #{:A}} {:C #{:B}}) {:B #{:A}, :C #{:A :B}})))
+
 
 (defn sinks [graph verts]
   (reduce (fn [ngraph vert] (if (contains? ngraph vert) ngraph (assoc ngraph vert #{}))) graph verts))
 
-(deftest sinks_test
-  (is (= mygraph (sinks mygraph :A))))
+
 
 (defn inv-edges [src dests]
   (zipmap dests (repeat #{src})))
 
-(deftest inv-edges_test
-  (is (= (inv-edges :A #{:B :C :D}) {:D #{:A}, :B #{:A}, :C #{:A}}))
-  (is (= (inv-edges :A #{}) {})))
+
     ;;essential function
 
 (defn transpose
@@ -250,8 +230,7 @@
      (recur (rest ks) (merge-edges res (inv-edges (first ks) (get graph (first ks)))))
      (sinks res (keys graph)))))
 
-(deftest transpose_test
-  (is (= (transpose mygraph) {:A #{}, :B #{:A}, :C #{:A :B :E}, :D #{:C}, :E #{:D}, :F #{:A :H}, :G #{:F}, :H #{:F :G}, :I #{:G :H}})))
+
 
 (defn compute-scc [graph]
   (let [stack (dfs-stack graph) t-graph (transpose graph)]
@@ -263,22 +242,18 @@
          (recur (rest s) visited' (conj res comp))))
       res))))
 
-(deftest compute-scc_test
-  (is (= (compute-scc mygraph) [#{:A} #{:B} #{:C :D :E} #{:F :G :H} #{:I}])))
 
 
-(compute-scc (to_var_block grid 3))
-;;(deftest doms-from-scc_test
-;;  (def scc1 (compute-scc (graph-with-matching alldiff-doms-td (max-matching alldiff-doms-td))))
-;;  (is (= (doms-from-scc (into #{} (keys alldiff-doms-td)) scc1) {:v1 #{}, :v2 #{}, :v5 #{4 6 5}, :v4 #{4 6 5}, :v3 #{4 6 5}})))
+
+;;(compute-scc (to_var_block grid 3))
+
 
 
 ;;(doms-from-scc (into #{} (keys alldiff-doms-td)) scc1)
 
 (defn isolated-values [variables scc]
   (into #{} (map first (filter #(and (= (count %) 1) (not (variables (first %))))scc))))
-;;(deftest isolated-values_test
-  ;;(is (=(isolated-values (into #{} (keys alldiff-doms-td)) scc1) #{1 2 3})))
+
 
 (defn values-known-by [doms value]
   (reduce (fn [res [v values]]
@@ -286,9 +261,7 @@
             (conj res v)
             res)) #{} doms))
 
-(deftest values-known-by_test
-  (is (= (values-known-by alldiff-doms-td 1) #{:v1 :v2}))
-  (is (= (values-known-by alldiff-doms-td 4) #{:v2 :v3 :v4 :v5})))
+
 
 ;;ne marche pas apparement remplacer par un simple loop recur
 (comment (defn add-value [doms vs value]
@@ -306,8 +279,7 @@
                (add-value doms' (values-known-by doms value) value))
             scc-doms
             isolated)))
-;;(deftest access_test
-  ;;(is (= (access alldiff-doms-td scc1) {:v1 #{1 3 2}, :v2 #{1 2}, :v5 #{4 6 5}, :v4 #{4 6 5}, :v3 #{4 6 5}})))
+
 
 
 (defn alldiff
@@ -315,26 +287,12 @@
   [doms]
   (let [match (max-matching doms)]
    (if (complete-matching? doms match)
-    (let [scc (compute-scc (graph-with-matching doms match))
-          fg (println "scc =" scc)]
+    (let [scc (compute-scc (graph-with-matching doms match))]
      (access doms scc))
     ;;incomlet
     nil)))
 
-(deftest alldiff_test
-  (is (= (alldiff alldiff-doms-td) {:v1 #{1 2 3} :v2 #{1 2} :v3 #{4 6 5} :v4 #{4 5 6} :v5 #{4 5 6}})))
-
-
-
-(defn solve1 [grid]
-  (max-matching (to_var_block grid 1))
-  (max-matching (to_var_block grid 8))
-  (max-matching (to_var_block grid 3))
-  (first (val (first (alldiff (to_var_block grid 1)))))
-  (alldiff (to_var_block grid 2))
-  (alldiff (to_var_block grid 3))
- (alldiff (to_var_block grid 4)))
- ;;Suite a un probleme de compqtibiliterr entre javaScript et clojure Integer on a redefinie la methode parse pour un chiffre entre 1 et 9 ...
+ ;;Suite à un problème de compatibiliter entre Javascripts et clojure Integer on a redéfini la méthode parse pour un chiffre entre 1 et 9...
 (defn manuel-parse [str]
   (cond
              (== (compare str "1") 0) 1
@@ -347,31 +305,37 @@
              (== (compare str "8") 0) 8
 
              :else 9))
-(defn fix-singleton [grid index doms]
+(defn fix-singleton
+  "fix all singleton of a grid"
+  [grid index doms]
           (loop [s doms,mygrid grid]
             (if (seq s)
              (if (= (count (val (first s))) 1)
                (let [var-num (manuel-parse (subs (str (key (first s))) 2))]
                 (let [offset-y (inc (int (/ (dec var-num) 3))) , y (* (int (/ (dec index) 3)) 3), offset-x (inc (int (mod (dec var-num) 3))) ,x (* (int (mod (dec index) 3)) 3)]
-                 (println "x " (+ x offset-x) " y " (+ y offset-y) " val " (first (val (first s))))
+                 ;;(println "x " (+ x offset-x) " y " (+ y offset-y) " val " (first (val (first s))))
                  (recur (rest s) (g/change-cell mygrid (+ x offset-x) (+ y offset-y) (g/mk-cell (first (val (first s))))))))
                ;;pas singleton
               (recur (rest s) mygrid))
              mygrid)))
 
-(defn fix-singleton2 [grid index doms]
+(defn fix-singleton2
+  "same as fix-singleton but with a boolean"
+  [grid index doms]
   (loop [s doms,mygrid grid,fixed false];;fixed pour indique que fix-singleton a fixed au moins une valeur dans la grille.
     (if (seq s)
      (if (= (count (val (first s))) 1)
        (let [var-num (manuel-parse (subs (str (key (first s))) 2))]
         (let [offset-y (inc (int (/ (dec var-num) 3))) , y (* (int (/ (dec index) 3)) 3), offset-x (inc (int (mod (dec var-num) 3))) ,x (* (int (mod (dec index) 3)) 3)]
-         (println "x " (+ x offset-x) " y " (+ y offset-y) " val " (first (val (first s))))
+         ;;(println "x " (+ x offset-x) " y " (+ y offset-y) " val " (first (val (first s))))
          (recur (rest s) (g/change-cell mygrid (+ x offset-x) (+ y offset-y) (g/mk-cell (first (val (first s))))) true)))
        ;;pas singleton
       (recur (rest s) mygrid fixed))
      [mygrid fixed])))
 
-(defn solver [grid]
+(defn solver
+  "solve a simple grid with only singletons else INFINIT-LOOP!!! be carefull"
+   [grid]
           (loop [mygrid grid,index 1,finish (cfl/grid-resolu? grid)]
            (if-not finish
              (let [alldiff-doms (alldiff (to_var_block mygrid index))]
@@ -380,7 +344,9 @@
                 nil))
              mygrid)))
 
-(defn solver2 [grid]
+(defn solve-once
+  "try to fix singletons of the grid, return the new grid and true if did else the first grid (or nil) and false"
+  [grid]
          (loop [mygrid grid,index 1,fixed false]
           (if (< index 10)
             (let [alldiff-doms (alldiff (to_var_block mygrid index))]
@@ -394,12 +360,12 @@
 (defn strat-first [grid]
   (loop [index 1]
    (if (< index 10)
-     (let [alldiff-doms (alldiff (to_var_block grid index))]
+     (let [alldiff-doms (to_var_block grid index)]
       (if (> (count alldiff-doms) 0)
        [index (first alldiff-doms)]
        (recur (inc index))))
     [1 #{}])))
-(strat-first grid)
+
 (defn strat-best [grid]
    (loop [index 1,myindex 1 best {:v1 (into #{} (take 10 (range 1 10)))}]
     (if (< index 10)
@@ -414,10 +380,8 @@
              (recur (inc index) index best2))
         (recur (inc index) myindex best)))
      [myindex best])))
-;;(strat-best hardgrid)
 
-;;(deftest strat-first_test
-;;  (is (= (strat-first emptygrid) #{1 2 3 4 5 6 7 8 9})))
+
 
 (def hardgrid
   [[;; row 1
@@ -487,58 +451,76 @@
 (defn fix-value [grid  index var val]
   (let [var-num (manuel-parse (subs (str var) 2))]
    (let [offset-y (inc (int (/ (dec var-num) 3))) , y (* (int (/ (dec index) 3)) 3), offset-x (inc (int (mod (dec var-num) 3))) ,x (* (int (mod (dec index) 3)) 3)]
-    (println "x " (+ x offset-x) " y " (+ y offset-y) " val " val)
+    ;;(println "x " (+ x offset-x) " y " (+ y offset-y) " val " val)
     (g/change-cell grid (+ x offset-x) (+ y offset-y) (g/mk-cell val)))))
 
 ;(fix-value emptygrid 1 :v3 5)
 
-(defn solver3 [grid]
+(defn solver-cpx [grid]
   (loop [mygrid grid,finish (cfl/grid-resolu? grid),fixed true]
     (if-not finish
       (if fixed
-        (let [[grid' fixed'] (solver2 mygrid)]
+        (let [[grid' fixed'] (solve-once mygrid)]
           (if (nil? grid')
             nil
             (recur grid' (cfl/grid-resolu? grid') fixed')))
         (let [[index doms] (strat-best mygrid)]
           (loop [s (second doms)]
             (if (seq s)
-              (let [newgrid (solver3 (fix-value mygrid index (first doms) (first s)))]
+              (let [newgrid (solver-cpx (fix-value mygrid index (first doms) (first s)))]
                (if (nil? newgrid)
                  (recur (rest s))
                  newgrid))
              nil))))
       mygrid)))
 
-(comment (defn solver4 [grid tour]
-           (loop [mygrid grid,finish (cfl/grid-resolu? grid),fixed true, t tour]
-             (if-not finish
-               (if fixed
-                 (let [[grid' fixed'] (solver2 mygrid)]
-                   (if (nil? grid')
-                     [nil t]
-                     (recur grid' (cfl/grid-resolu? grid') fixed' t)))
-                 (let [[index doms] (strat-best mygrid)]
-                   (loop [s (second doms)]
-                     (if (seq s)
-                       (let [[newgrid t] (solver4 (fix-value mygrid index (first doms) (first s)) t)]
-                        (if (nil? newgrid)
-                          (recur (rest s))
-                          [newgrid t]))
-                      [nil t]))))
-               (if t
-                 [nil false]
-                 [mygrid false])))))
 
-;;(solver3 emptygrid)
+(defn random-fix [grid]
+  (let [
+    x (inc (rand-int 9))
+    y (inc (rand-int 9))
+    value (inc (rand-int 9))]
+      (g/change-cell grid x y (g/mk-cell value))))
 
-;;(solver4 (fix-value emptygrid 1 :v1 3) true)
+(defn random-clear [grid]
+  (let [
+      x (inc (rand-int 9))
+      y (inc (rand-int 9))]
+        (g/change-cell grid x y (g/mk-cell))))
 
-;;(solver4 hardgrid true)
+(defn nombre-solutions
+"on ne calcule pas vraiment le nombre de solutions mais si on a plus de 2 on arrete de calculer"
+   [grid]
+  (loop [mygrid grid,finish (cfl/grid-resolu? grid),fixed true]
+    (if-not finish
+      (if fixed
+        (let [[grid' fixed'] (solve-once mygrid)]
+          (if (nil? grid')
+            0
+            (recur grid' (cfl/grid-resolu? grid') fixed')))
+        (let [[index doms] (strat-best mygrid)]
+          (loop [s (second doms),solutions 0]
+            (if (seq s)
+              (if (< solutions 2)
+                  (recur (rest s) (+ solutions (nombre-solutions (fix-value mygrid index (first doms) (first s)))))
+                solutions)
+             solutions))))
+      1)))
+
+(defn one-solution? [grid]
+  (= 1 (nombre-solutions grid)))
+
+(defn generate-grid []
+  (loop [mygrid (solver-cpx (random-fix emptygrid))];;on commence avec une grille pleine correcte
+    (let [newgrid (random-clear mygrid)]
+      (if (one-solution? newgrid)
+        (recur newgrid)
+        mygrid))))
+
 
 
 (defn solve
   "Solve the sudoku `grid` by returing a full solved grid,
  or `nil` if the solver fails."
   [grid]
-  (first (solver4 hardgrid true)))
+  (generate-grid))

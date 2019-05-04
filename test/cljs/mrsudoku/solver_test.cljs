@@ -33,7 +33,7 @@
 (def mygraph {:A #{:F :B :C}, :B #{:C}, :C #{:D}, :D #{:E} :E #{:C}, :F #{:H :G}, :G #{:H :I}, :H #{:F :I}})
 (def scc1 (compute-scc (graph-with-matching alldiff-doms-td (max-matching alldiff-doms-td))))
 ;;quelque grilles
-(def hardgrid
+(def hardgrid ;;du net
   [[;; row 1
     [(g/mk-cell 8) (g/mk-cell) (g/mk-cell)
      (g/mk-cell) (g/mk-cell) (g/mk-cell 3)
@@ -98,8 +98,8 @@
           (g/mk-cell ) (g/mk-cell ) (g/mk-cell)]]])
 
 (deftest to_var_block_test
-  (is (= (to_var_block sudoku-grid 1) {:v3 #{1 2 4}, :v5 #{2 4 7}, :v6 #{2 4 7}, :v7 #{1 2}})
-    (= (to_var_block sudoku-grid 9) {:v3 #{4}, :v4 #{3 6}, :v5 #{3}, :v7 #{1 3 4 6}})))
+  (is (= (to_var_block sudoku-grid 1) {:v3 #{1 2 4}, :v5 #{2 4 7}, :v6 #{2 4 7}, :v7 #{1 2}}))
+  (is (= (to_var_block sudoku-grid 9) {:v3 #{4}, :v4 #{3 6}, :v5 #{3}, :v7 #{1 3 4 6}})))
 
 (deftest augment_tests
   (is (= (augment {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}} :x1 #{} {}) [true,#{1},{1 :x1}]))
@@ -107,7 +107,8 @@
   (is (= (augment {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}} :x3 #{1 2} {1 :x1, 2 :x2}) [true #{1 2 4} {1 :x1, 2 :x2,4 :x3}])))
 
 (deftest match-matching_tests
-  (is (= (max-matching {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}}) {1 :x1, 2 :x2,4 :x3})))
+  (is (= (max-matching {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}}) {1 :x1, 2 :x2,4 :x3}))
+  (is (= (max-matching {:x1 #{1,2}, :x2 #{1,2}, :x3 #{1,2}}) {1 :x2, 2 :x1})))
 
 (deftest complete-matching?_test
   (is (= (complete-matching? (into #{} (keys {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}})) (max-matching {:x1 #{1,4,43}, :x2 #{2}, :x3 #{4}})) true))
@@ -128,16 +129,16 @@
   (is (= (dfs mygraph :A conj #{}) #{:A :B :C :D :E :F :G :H :I})))
 
 (deftest dfs-post_test
-  (is (= (dfs-post mygraph :A conj ()) '(:A :B :F :G :H :I :C :D :E))))
+  (is (= (dfs-post mygraph :A conj ()) (into () [:I :H :G :F :E :D :C :B :A]))))
 
 (deftest dfs-stack_test
-  (is (= (dfs-stack mygraph) '(:A :B :C :D :E :F :G :H :I))))
+  (is (= (dfs-stack mygraph) (into () [:I :H :G :F :E :D :C :B :A]))))
 
 (deftest merge-edges_test
   (is (= (merge-edges {:B #{:A}, :C #{:A}} {:C #{:B}}) {:B #{:A}, :C #{:A :B}})))
 
 (deftest sinks_test
-  (is (= mygraph (sinks mygraph :A))))
+  (is (= mygraph (sinks mygraph [:A]))))
 
 (deftest inv-edges_test
   (is (= (inv-edges :A #{:B :C :D}) {:D #{:A}, :B #{:A}, :C #{:A}}))
@@ -165,8 +166,7 @@
 (deftest strat-first_test
   (is (= (first (strat-first sudoku-grid)) 1));;exemple [1 [:v5 #{1 2 4 7}]]
   (is (= (first (strat-first hardgrid)) 1));;exemple [1 [:v2 #{1 4 6 2}]]
-  (= (second (second (strat-first emptygrid))) (into #{} (take 10 (range 1 10))))
-  )
+  (= (second (second (strat-first emptygrid))) (into #{} (take 10 (range 1 10)))))
 
 (deftest strat-best_test
   (is (= (strat-best sudoku-grid) [9 [:v3 #{4}]]));;ATTENTION il peu avoir un autre best car first sur un ensemble...
@@ -176,8 +176,7 @@
 (deftest nombre-solutions_test
   (is (= (nombre-solutions sudoku-grid) 1))
   (is (= (nombre-solutions hardgrid) 1))
-  (is (> (nombre-solutions emptygrid) 1))
-  )
+  (is (> (nombre-solutions emptygrid) 1)))
 
 (deftest one-solution?_test
   (is (= (one-solution? sudoku-grid) true))

@@ -9,13 +9,13 @@ goog.require('mrsudoku.model.solver');
 re_frame.core.reg_event_db.call(null,new cljs.core.Keyword(null,"initialize","initialize",609952913),(function (_,___$1){
 return mrsudoku.db.default_db;
 }));
-re_frame.core.reg_event_db.call(null,new cljs.core.Keyword(null,"cell-value-changed","cell-value-changed",-452878054),(function (db,p__11090){
-var vec__11091 = p__11090;
-var _ = cljs.core.nth.call(null,vec__11091,(0),null);
-var vec__11094 = cljs.core.nth.call(null,vec__11091,(1),null);
-var newval = cljs.core.nth.call(null,vec__11094,(0),null);
-var cell_col = cljs.core.nth.call(null,vec__11094,(1),null);
-var cell_row = cljs.core.nth.call(null,vec__11094,(2),null);
+re_frame.core.reg_event_db.call(null,new cljs.core.Keyword(null,"cell-value-changed","cell-value-changed",-452878054),(function (db,p__23615){
+var vec__23616 = p__23615;
+var _ = cljs.core.nth.call(null,vec__23616,(0),null);
+var vec__23619 = cljs.core.nth.call(null,vec__23616,(1),null);
+var newval = cljs.core.nth.call(null,vec__23619,(0),null);
+var cell_col = cljs.core.nth.call(null,vec__23619,(1),null);
+var cell_row = cljs.core.nth.call(null,vec__23619,(2),null);
 var nval = parseInt(newval);
 var val_ok_QMARK_ = ((((1) <= nval)) && ((nval <= (9))));
 var grid = mrsudoku.model.grid.change_cell.call(null,new cljs.core.Keyword(null,"grid","grid",402978600).cljs$core$IFn$_invoke$arity$1(db),cell_col,cell_row,((val_ok_QMARK_)?mrsudoku.model.grid.mk_cell.call(null,new cljs.core.Keyword(null,"set","set",304602554),nval):mrsudoku.model.grid.mk_cell.call(null)));
