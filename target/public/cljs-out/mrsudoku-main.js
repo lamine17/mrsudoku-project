@@ -1,4 +1,4 @@
-var CLOSURE_UNCOMPILED_DEFINES = {"figwheel.repl.connect_url":"ws:\/\/localhost:9500\/figwheel-connect?fwprocess=d1e925&fwbuild=mrsudoku"};
+var CLOSURE_UNCOMPILED_DEFINES = {"figwheel.repl.connect_url":"ws:\/\/localhost:9500\/figwheel-connect?fwprocess=615e70&fwbuild=mrsudoku"};
 var CLOSURE_NO_DEPS = true;
 if(typeof goog == "undefined") document.write('<script src="/cljs-out/mrsudoku/goog/base.js"></script>');
 document.write('<script src="/cljs-out/mrsudoku/goog/deps.js"></script>');

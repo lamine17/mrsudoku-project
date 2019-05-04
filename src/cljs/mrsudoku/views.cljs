@@ -50,6 +50,7 @@
      [:h1 @name]
      [:div {:class "control-panel"}
       [:button {:type "Button" :on-click #(re-frame/dispatch [:initialize])} "Reinitialize"]
+      [:button {:type "Button" :on-click #(re-frame/dispatch [:generate []])} "Generate"]
       [:button {:type "Button" :on-click #(re-frame/dispatch [:solve-button-clicked []])} "Solve"]]
      [:div {:class "sudokuview"} [grid-view]]]))
 

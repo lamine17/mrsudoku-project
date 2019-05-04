@@ -3,23 +3,6 @@
             [mrsudoku.model.grid :as g]
             [mrsudoku.model.conflict :as cfl]))
 
-;;main: to_var pour un block; puis mac-matching sur le retour
-;;puis sur la nouvelle grille obtenue on fait un nouveau to_var sur le block suivant
-;;etc.
-
-(defn var_block [grid num]
-  (let [pos #{1 2 3 4 5 6 7 8 9}
-        block (cfl/values (g/block grid num))]
-   (loop [b (g/block grid num),index 1,res {}]
-    (if (seq b)
-      (if-not (g/cell-value (first b))
-        (recur
-          (rest b)
-          (inc index)
-          (assoc res (keyword (str "v" index))
-           (clojure.set/difference pos block)))
-       (recur (rest b) (inc index) res))
-      res))))
 
 
 (defn to_var_block [grid num]
@@ -46,39 +29,7 @@
       res))))
 
 
-(def grid
-  [[;; row 1
-    [(g/mk-cell 5) (g/mk-cell 3) (g/mk-cell)
-     (g/mk-cell 6) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell) (g/mk-cell 9) (g/mk-cell 8)]
-    [(g/mk-cell) (g/mk-cell 7) (g/mk-cell)
-     (g/mk-cell 1) (g/mk-cell 9) (g/mk-cell 5)
-     (g/mk-cell) (g/mk-cell) (g/mk-cell)]
-    [(g/mk-cell) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell) (g/mk-cell 6) (g/mk-cell)] ],
-   [;; row 2
-    [(g/mk-cell 8) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell 4) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell 7) (g/mk-cell) (g/mk-cell)]
-    [(g/mk-cell) (g/mk-cell 6) (g/mk-cell)
-     (g/mk-cell 8) (g/mk-cell) (g/mk-cell 3)
-     (g/mk-cell) (g/mk-cell 2) (g/mk-cell)]
-    [(g/mk-cell) (g/mk-cell) (g/mk-cell 3)
-     (g/mk-cell) (g/mk-cell) (g/mk-cell 1)
-     (g/mk-cell) (g/mk-cell) (g/mk-cell 6)]],
-   [;; row 3
-    [(g/mk-cell) (g/mk-cell 6) (g/mk-cell)
-      (g/mk-cell) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell) (g/mk-cell) (g/mk-cell)]
-    [(g/mk-cell) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell 4) (g/mk-cell 1) (g/mk-cell 9)
-     (g/mk-cell) (g/mk-cell 8) (g/mk-cell)]
-    [(g/mk-cell 2) (g/mk-cell 8) (g/mk-cell)
-     (g/mk-cell) (g/mk-cell) (g/mk-cell 5)
-     (g/mk-cell) (g/mk-cell 7) (g/mk-cell 9)]]])
-(count (cfl/values (g/block grid 1)))
-;;A ecrire fonction de parcourt des dimensions (block - ligne - colonne)
+;;la fonction proposee par le prof
 (comment (defn augment
           "take a graph, a start summit, a set of visited summits and a match and return a flag indicated if the augment succeed or not"
           [graph src visited match]
@@ -96,7 +47,7 @@
                       [true,(conj visited (first dests)),(assoc match (first dests) src)]))
              [false,visited,match]))))
 
-
+;;la version finale de la fonction augment...
 (defn augment
   "take a graph, a start summit, a set of visited summits and a match and return a flag indicated if the augment succeed or not"
   ([graph src visited match] (augment graph src visited match #{}))
@@ -126,14 +77,6 @@
         (recur (rest summits) visited' match'))
      match)))
 
-
-
-
-;;a confirmer...
-(comment (defn dfs-pre
-          ([graph vert f init] (first (dfs-pre graph vert f init #{})))
-          ([graph vert f init visited] (if (visited vert) [init visited] (reduce (fn [[res,visited] v] (if (visited v) [res,visited] (dfs-pre graph v f (f res v) (conj visited v))))
-                                                                          [(f init vert),#{vert}] (get graph vert))))))
 
 (defn complete-matching? [vars match]
   (= (count vars) (count match)))
@@ -243,14 +186,6 @@
       res))))
 
 
-
-
-;;(compute-scc (to_var_block grid 3))
-
-
-
-;;(doms-from-scc (into #{} (keys alldiff-doms-td)) scc1)
-
 (defn isolated-values [variables scc]
   (into #{} (map first (filter #(and (= (count %) 1) (not (variables (first %))))scc))))
 
@@ -313,7 +248,6 @@
              (if (= (count (val (first s))) 1)
                (let [var-num (manuel-parse (subs (str (key (first s))) 2))]
                 (let [offset-y (inc (int (/ (dec var-num) 3))) , y (* (int (/ (dec index) 3)) 3), offset-x (inc (int (mod (dec var-num) 3))) ,x (* (int (mod (dec index) 3)) 3)]
-                 ;;(println "x " (+ x offset-x) " y " (+ y offset-y) " val " (first (val (first s))))
                  (recur (rest s) (g/change-cell mygrid (+ x offset-x) (+ y offset-y) (g/mk-cell (first (val (first s))))))))
                ;;pas singleton
               (recur (rest s) mygrid))
@@ -327,7 +261,6 @@
      (if (= (count (val (first s))) 1)
        (let [var-num (manuel-parse (subs (str (key (first s))) 2))]
         (let [offset-y (inc (int (/ (dec var-num) 3))) , y (* (int (/ (dec index) 3)) 3), offset-x (inc (int (mod (dec var-num) 3))) ,x (* (int (mod (dec index) 3)) 3)]
-         ;;(println "x " (+ x offset-x) " y " (+ y offset-y) " val " (first (val (first s))))
          (recur (rest s) (g/change-cell mygrid (+ x offset-x) (+ y offset-y) (g/mk-cell (first (val (first s))))) true)))
        ;;pas singleton
       (recur (rest s) mygrid fixed))
@@ -383,78 +316,13 @@
 
 
 
-(def hardgrid
-  [[;; row 1
-    [(g/mk-cell 8) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell) (g/mk-cell) (g/mk-cell 3)
-     (g/mk-cell) (g/mk-cell 7) (g/mk-cell)]
-    [(g/mk-cell) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell 6) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell) (g/mk-cell 9) (g/mk-cell)]
-    [(g/mk-cell) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell 2) (g/mk-cell) (g/mk-cell)] ],
-   [;; row 2
-    [(g/mk-cell) (g/mk-cell 5) (g/mk-cell)
-     (g/mk-cell) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell) (g/mk-cell) (g/mk-cell)]
-    [(g/mk-cell) (g/mk-cell) (g/mk-cell 7)
-     (g/mk-cell) (g/mk-cell 4) (g/mk-cell 5)
-     (g/mk-cell 1) (g/mk-cell ) (g/mk-cell)]
-    [(g/mk-cell) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell 7) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell) (g/mk-cell 3) (g/mk-cell )]],
-   [;; row 3
-    [(g/mk-cell) (g/mk-cell ) (g/mk-cell 1)
-      (g/mk-cell) (g/mk-cell) (g/mk-cell 8)
-     (g/mk-cell) (g/mk-cell 9) (g/mk-cell)]
-    [(g/mk-cell) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell 5) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell) (g/mk-cell ) (g/mk-cell)]
-    [(g/mk-cell ) (g/mk-cell 6) (g/mk-cell 8)
-     (g/mk-cell) (g/mk-cell 1) (g/mk-cell)
-     (g/mk-cell 4) (g/mk-cell ) (g/mk-cell)]]])
 
-(def emptygrid
-  [[;; row 1
-    [(g/mk-cell ) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell) (g/mk-cell ) (g/mk-cell)]
-    [(g/mk-cell) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell ) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell) (g/mk-cell ) (g/mk-cell)]
-    [(g/mk-cell) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell ) (g/mk-cell) (g/mk-cell)] ],
-   [;; row 2
-    [(g/mk-cell) (g/mk-cell ) (g/mk-cell)
-     (g/mk-cell) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell) (g/mk-cell) (g/mk-cell)]
-    [(g/mk-cell) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell) (g/mk-cell ) (g/mk-cell)
-     (g/mk-cell ) (g/mk-cell ) (g/mk-cell)]
-    [(g/mk-cell) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell ) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell) (g/mk-cell ) (g/mk-cell )]],
-   [;; row 3
-    [(g/mk-cell) (g/mk-cell ) (g/mk-cell)
-      (g/mk-cell) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell) (g/mk-cell ) (g/mk-cell)]
-    [(g/mk-cell) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell ) (g/mk-cell) (g/mk-cell)
-     (g/mk-cell) (g/mk-cell ) (g/mk-cell)]
-    [(g/mk-cell ) (g/mk-cell ) (g/mk-cell)
-     (g/mk-cell) (g/mk-cell ) (g/mk-cell)
-     (g/mk-cell ) (g/mk-cell ) (g/mk-cell)]]])
 
-;;(second (fix-singleton2 emptygrid 1 (to_var_block emptygrid 1)))
 (defn fix-value [grid  index var val]
   (let [var-num (manuel-parse (subs (str var) 2))]
    (let [offset-y (inc (int (/ (dec var-num) 3))) , y (* (int (/ (dec index) 3)) 3), offset-x (inc (int (mod (dec var-num) 3))) ,x (* (int (mod (dec index) 3)) 3)]
-    ;;(println "x " (+ x offset-x) " y " (+ y offset-y) " val " val)
     (g/change-cell grid (+ x offset-x) (+ y offset-y) (g/mk-cell val)))))
 
-;(fix-value emptygrid 1 :v3 5)
 
 (defn solver-cpx [grid]
   (loop [mygrid grid,finish (cfl/grid-resolu? grid),fixed true]
@@ -510,12 +378,46 @@
 (defn one-solution? [grid]
   (= 1 (nombre-solutions grid)))
 
+  (def emptygrid
+    [[;; row 1
+    [(g/mk-cell ) (g/mk-cell) (g/mk-cell)
+    (g/mk-cell) (g/mk-cell) (g/mk-cell)
+    (g/mk-cell) (g/mk-cell ) (g/mk-cell)]
+    [(g/mk-cell) (g/mk-cell) (g/mk-cell)
+    (g/mk-cell ) (g/mk-cell) (g/mk-cell)
+    (g/mk-cell) (g/mk-cell ) (g/mk-cell)]
+    [(g/mk-cell) (g/mk-cell) (g/mk-cell)
+    (g/mk-cell) (g/mk-cell) (g/mk-cell)
+    (g/mk-cell ) (g/mk-cell) (g/mk-cell)] ],
+    [;; row 2
+    [(g/mk-cell) (g/mk-cell ) (g/mk-cell)
+    (g/mk-cell) (g/mk-cell) (g/mk-cell)
+    (g/mk-cell) (g/mk-cell) (g/mk-cell)]
+    [(g/mk-cell) (g/mk-cell) (g/mk-cell)
+    (g/mk-cell) (g/mk-cell ) (g/mk-cell)
+    (g/mk-cell ) (g/mk-cell ) (g/mk-cell)]
+    [(g/mk-cell) (g/mk-cell) (g/mk-cell)
+    (g/mk-cell ) (g/mk-cell) (g/mk-cell)
+    (g/mk-cell) (g/mk-cell ) (g/mk-cell )]],
+    [;; row 3
+    [(g/mk-cell) (g/mk-cell ) (g/mk-cell)
+    (g/mk-cell) (g/mk-cell) (g/mk-cell)
+    (g/mk-cell) (g/mk-cell ) (g/mk-cell)]
+    [(g/mk-cell) (g/mk-cell) (g/mk-cell)
+    (g/mk-cell ) (g/mk-cell) (g/mk-cell)
+    (g/mk-cell) (g/mk-cell ) (g/mk-cell)]
+    [(g/mk-cell ) (g/mk-cell ) (g/mk-cell)
+    (g/mk-cell) (g/mk-cell ) (g/mk-cell)
+    (g/mk-cell ) (g/mk-cell ) (g/mk-cell)]]])
+    
 (defn generate-grid []
-  (loop [mygrid (solver-cpx (random-fix emptygrid))];;on commence avec une grille pleine correcte
-    (let [newgrid (random-clear mygrid)]
+  (loop [mygrid (solver-cpx (random-fix emptygrid)), chance 0];;on commence avec une grille pleine correcte
+    (if (< chance 3)
+      (let [newgrid (random-clear mygrid)]
       (if (one-solution? newgrid)
-        (recur newgrid)
-        mygrid))))
+        (recur newgrid chance)
+        (recur mygrid (inc chance))))
+        mygrid)))
 
 
 
@@ -523,4 +425,7 @@
   "Solve the sudoku `grid` by returing a full solved grid,
  or `nil` if the solver fails."
   [grid]
+  (solver-cpx grid))
+
+(defn generate [grid]
   (generate-grid))

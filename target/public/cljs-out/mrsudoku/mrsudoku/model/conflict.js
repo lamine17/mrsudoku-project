@@ -24,20 +24,20 @@ var res = cljs.core.PersistentVector.EMPTY;
 while(true){
 if(cljs.core.seq.call(null,s)){
 if(cljs.core._EQ_.call(null,co,(except - (1)))){
-var G__9196 = cljs.core.rest.call(null,s);
-var G__9197 = (co + (1));
-var G__9198 = res;
-s = G__9196;
-co = G__9197;
-res = G__9198;
+var G__9493 = cljs.core.rest.call(null,s);
+var G__9494 = (co + (1));
+var G__9495 = res;
+s = G__9493;
+co = G__9494;
+res = G__9495;
 continue;
 } else {
-var G__9199 = cljs.core.rest.call(null,s);
-var G__9200 = (co + (1));
-var G__9201 = cljs.core.conj.call(null,res,cljs.core.nth.call(null,cells,co));
-s = G__9199;
-co = G__9200;
-res = G__9201;
+var G__9496 = cljs.core.rest.call(null,s);
+var G__9497 = (co + (1));
+var G__9498 = cljs.core.conj.call(null,res,cljs.core.nth.call(null,cells,co));
+s = G__9496;
+co = G__9497;
+res = G__9498;
 continue;
 }
 } else {
@@ -58,10 +58,10 @@ var s = (((kind1 instanceof cljs.core.Keyword))?cljs.core.conj.call(null,cljs.co
 var res__$1 = res;
 while(true){
 if(cljs.core.seq.call(null,s)){
-var G__9202 = cljs.core.rest.call(null,s);
-var G__9203 = cljs.core.conj.call(null,res__$1,cljs.core.first.call(null,s));
-s = G__9202;
-res__$1 = G__9203;
+var G__9499 = cljs.core.rest.call(null,s);
+var G__9500 = cljs.core.conj.call(null,res__$1,cljs.core.first.call(null,s));
+s = G__9499;
+res__$1 = G__9500;
 continue;
 } else {
 return res__$1;
@@ -75,14 +75,14 @@ return mrsudoku.model.conflict.mk_conflict.call(null,mrsudoku.model.conflict.mer
 });
 mrsudoku.model.conflict.merge_conflicts = (function mrsudoku$model$conflict$merge_conflicts(var_args){
 var args__4534__auto__ = [];
-var len__4531__auto___9205 = arguments.length;
-var i__4532__auto___9206 = (0);
+var len__4531__auto___9502 = arguments.length;
+var i__4532__auto___9503 = (0);
 while(true){
-if((i__4532__auto___9206 < len__4531__auto___9205)){
-args__4534__auto__.push((arguments[i__4532__auto___9206]));
+if((i__4532__auto___9503 < len__4531__auto___9502)){
+args__4534__auto__.push((arguments[i__4532__auto___9503]));
 
-var G__9207 = (i__4532__auto___9206 + (1));
-i__4532__auto___9206 = G__9207;
+var G__9504 = (i__4532__auto___9503 + (1));
+i__4532__auto___9503 = G__9504;
 continue;
 } else {
 }
@@ -100,9 +100,9 @@ return cljs.core.apply.call(null,cljs.core.partial.call(null,cljs.core.merge_wit
 mrsudoku.model.conflict.merge_conflicts.cljs$lang$maxFixedArity = (0);
 
 /** @this {Function} */
-mrsudoku.model.conflict.merge_conflicts.cljs$lang$applyTo = (function (seq9204){
+mrsudoku.model.conflict.merge_conflicts.cljs$lang$applyTo = (function (seq9501){
 var self__4519__auto__ = this;
-return self__4519__auto__.cljs$core$IFn$_invoke$arity$variadic(cljs.core.seq.call(null,seq9204));
+return self__4519__auto__.cljs$core$IFn$_invoke$arity$variadic(cljs.core.seq.call(null,seq9501));
 });
 
 mrsudoku.model.conflict.update_conflicts = (function mrsudoku$model$conflict$update_conflicts(conflict_kind,cx,cy,value,conflicts){
@@ -140,20 +140,20 @@ var cell = cljs.core.first.call(null,cells);
 var temp__5718__auto__ = mrsudoku.model.conflict.conflict_value.call(null,col,cy,cell);
 if(cljs.core.truth_(temp__5718__auto__)){
 var value = temp__5718__auto__;
-var G__9208 = (cy + (1));
-var G__9209 = cljs.core.rest.call(null,cells);
-var G__9210 = mrsudoku.model.conflict.update_conflicts.call(null,new cljs.core.Keyword(null,"col","col",-1959363084),cx,cy,value,conflicts);
-cy = G__9208;
-cells = G__9209;
-conflicts = G__9210;
+var G__9505 = (cy + (1));
+var G__9506 = cljs.core.rest.call(null,cells);
+var G__9507 = mrsudoku.model.conflict.update_conflicts.call(null,new cljs.core.Keyword(null,"col","col",-1959363084),cx,cy,value,conflicts);
+cy = G__9505;
+cells = G__9506;
+conflicts = G__9507;
 continue;
 } else {
-var G__9211 = (cy + (1));
-var G__9212 = cljs.core.rest.call(null,cells);
-var G__9213 = conflicts;
-cy = G__9211;
-cells = G__9212;
-conflicts = G__9213;
+var G__9508 = (cy + (1));
+var G__9509 = cljs.core.rest.call(null,cells);
+var G__9510 = conflicts;
+cy = G__9508;
+cells = G__9509;
+conflicts = G__9510;
 continue;
 }
 } else {
@@ -180,20 +180,20 @@ var cell = cljs.core.first.call(null,cells);
 var temp__5718__auto__ = mrsudoku.model.conflict.conflict_value.call(null,row,cx,cell);
 if(cljs.core.truth_(temp__5718__auto__)){
 var value = temp__5718__auto__;
-var G__9214 = (cx + (1));
-var G__9215 = cljs.core.rest.call(null,cells);
-var G__9216 = mrsudoku.model.conflict.update_conflicts.call(null,new cljs.core.Keyword(null,"row","row",-570139521),cx,cy,value,conflicts);
-cx = G__9214;
-cells = G__9215;
-conflicts = G__9216;
+var G__9511 = (cx + (1));
+var G__9512 = cljs.core.rest.call(null,cells);
+var G__9513 = mrsudoku.model.conflict.update_conflicts.call(null,new cljs.core.Keyword(null,"row","row",-570139521),cx,cy,value,conflicts);
+cx = G__9511;
+cells = G__9512;
+conflicts = G__9513;
 continue;
 } else {
-var G__9217 = (cx + (1));
-var G__9218 = cljs.core.rest.call(null,cells);
-var G__9219 = conflicts;
-cx = G__9217;
-cells = G__9218;
-conflicts = G__9219;
+var G__9514 = (cx + (1));
+var G__9515 = cljs.core.rest.call(null,cells);
+var G__9516 = conflicts;
+cx = G__9514;
+cells = G__9515;
+conflicts = G__9516;
 continue;
 }
 } else {
@@ -243,8 +243,8 @@ if(cljs.core._EQ_.call(null,num,(10))){
 return true;
 } else {
 if(cljs.core._EQ_.call(null,cljs.core.count.call(null,mrsudoku.model.conflict.values.call(null,mrsudoku.model.grid.block.call(null,grid,num))),(9))){
-var G__9220 = (num + (1));
-num = G__9220;
+var G__9517 = (num + (1));
+num = G__9517;
 continue;
 } else {
 return false;

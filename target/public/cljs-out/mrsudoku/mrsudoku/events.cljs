@@ -35,3 +35,12 @@
      ;; pas solvable
      (do (js/alert "Cannot solve Sudoku")
          db))))
+
+;;ajouter pour le generateur
+(re-frame/reg-event-db
+ :generate
+ (fn [db _]
+   (if-let [grid' (s/generate (:grid db))]
+     (assoc db
+            :grid grid'
+            :conflicts {}))))

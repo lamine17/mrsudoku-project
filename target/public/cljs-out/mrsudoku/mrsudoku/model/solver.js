@@ -4,37 +4,6 @@ goog.require('cljs.core');
 goog.require('cljs.test');
 goog.require('mrsudoku.model.grid');
 goog.require('mrsudoku.model.conflict');
-mrsudoku.model.solver.var_block = (function mrsudoku$model$solver$var_block(grid,num){
-var pos = new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 9, [(7),null,(1),null,(4),null,(6),null,(3),null,(2),null,(9),null,(5),null,(8),null], null), null);
-var block = mrsudoku.model.conflict.values.call(null,mrsudoku.model.grid.block.call(null,grid,num));
-var b = mrsudoku.model.grid.block.call(null,grid,num);
-var index = (1);
-var res = cljs.core.PersistentArrayMap.EMPTY;
-while(true){
-if(cljs.core.seq.call(null,b)){
-if(cljs.core.not.call(null,mrsudoku.model.grid.cell_value.call(null,cljs.core.first.call(null,b)))){
-var G__23473 = cljs.core.rest.call(null,b);
-var G__23474 = (index + (1));
-var G__23475 = cljs.core.assoc.call(null,res,cljs.core.keyword.call(null,["v",cljs.core.str.cljs$core$IFn$_invoke$arity$1(index)].join('')),clojure.set.difference.call(null,pos,block));
-b = G__23473;
-index = G__23474;
-res = G__23475;
-continue;
-} else {
-var G__23476 = cljs.core.rest.call(null,b);
-var G__23477 = (index + (1));
-var G__23478 = res;
-b = G__23476;
-index = G__23477;
-res = G__23478;
-continue;
-}
-} else {
-return res;
-}
-break;
-}
-});
 mrsudoku.model.solver.to_var_block = (function mrsudoku$model$solver$to_var_block(grid,num){
 var collig = new cljs.core.PersistentArrayMap(null, 6, [(1),mrsudoku.model.conflict.values.call(null,mrsudoku.model.grid.row.call(null,grid,(((((num - (1)) / (3)) | (0)) * (3)) + (1)))),(2),mrsudoku.model.conflict.values.call(null,mrsudoku.model.grid.row.call(null,grid,(((((num - (1)) / (3)) | (0)) * (3)) + (2)))),(3),mrsudoku.model.conflict.values.call(null,mrsudoku.model.grid.row.call(null,grid,(((((num - (1)) / (3)) | (0)) * (3)) + (3)))),(4),mrsudoku.model.conflict.values.call(null,mrsudoku.model.grid.col.call(null,grid,((cljs.core.mod.call(null,(num - (1)),(3)) * (3)) + (1)))),(5),mrsudoku.model.conflict.values.call(null,mrsudoku.model.grid.col.call(null,grid,((cljs.core.mod.call(null,(num - (1)),(3)) * (3)) + (2)))),(6),mrsudoku.model.conflict.values.call(null,mrsudoku.model.grid.col.call(null,grid,((cljs.core.mod.call(null,(num - (1)),(3)) * (3)) + (3))))], null);
 var pos = new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 9, [(7),null,(1),null,(4),null,(6),null,(3),null,(2),null,(9),null,(5),null,(8),null], null), null);
@@ -45,20 +14,20 @@ var res = cljs.core.PersistentArrayMap.EMPTY;
 while(true){
 if(cljs.core.seq.call(null,b)){
 if(cljs.core.not.call(null,mrsudoku.model.grid.cell_value.call(null,cljs.core.first.call(null,b)))){
-var G__23479 = cljs.core.rest.call(null,b);
-var G__23480 = (index + (1));
-var G__23481 = cljs.core.assoc.call(null,res,cljs.core.keyword.call(null,["v",cljs.core.str.cljs$core$IFn$_invoke$arity$1(index)].join('')),clojure.set.difference.call(null,pos,clojure.set.union.call(null,cljs.core.get.call(null,collig,((((index - (1)) / (3)) | (0)) + (1))),cljs.core.get.call(null,collig,(cljs.core.mod.call(null,(index - (1)),(3)) + (4))),block)));
-b = G__23479;
-index = G__23480;
-res = G__23481;
+var G__27968 = cljs.core.rest.call(null,b);
+var G__27969 = (index + (1));
+var G__27970 = cljs.core.assoc.call(null,res,cljs.core.keyword.call(null,["v",cljs.core.str.cljs$core$IFn$_invoke$arity$1(index)].join('')),clojure.set.difference.call(null,pos,clojure.set.union.call(null,cljs.core.get.call(null,collig,((((index - (1)) / (3)) | (0)) + (1))),cljs.core.get.call(null,collig,(cljs.core.mod.call(null,(index - (1)),(3)) + (4))),block)));
+b = G__27968;
+index = G__27969;
+res = G__27970;
 continue;
 } else {
-var G__23482 = cljs.core.rest.call(null,b);
-var G__23483 = (index + (1));
-var G__23484 = res;
-b = G__23482;
-index = G__23483;
-res = G__23484;
+var G__27971 = cljs.core.rest.call(null,b);
+var G__27972 = (index + (1));
+var G__27973 = res;
+b = G__27971;
+index = G__27972;
+res = G__27973;
 continue;
 }
 } else {
@@ -67,14 +36,12 @@ return res;
 break;
 }
 });
-mrsudoku.model.solver.grid = new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null,(5)),mrsudoku.model.grid.mk_cell.call(null,(3)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(6)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(9)),mrsudoku.model.grid.mk_cell.call(null,(8))], null),new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(7)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(1)),mrsudoku.model.grid.mk_cell.call(null,(9)),mrsudoku.model.grid.mk_cell.call(null,(5)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null)], null),new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(6)),mrsudoku.model.grid.mk_cell.call(null)], null)], null),new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null,(8)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(4)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(7)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null)], null),new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(6)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(8)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(3)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(2)),mrsudoku.model.grid.mk_cell.call(null)], null),new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(3)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(1)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(6))], null)], null),new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(6)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null)], null),new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(4)),mrsudoku.model.grid.mk_cell.call(null,(1)),mrsudoku.model.grid.mk_cell.call(null,(9)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(8)),mrsudoku.model.grid.mk_cell.call(null)], null),new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null,(2)),mrsudoku.model.grid.mk_cell.call(null,(8)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(5)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(7)),mrsudoku.model.grid.mk_cell.call(null,(9))], null)], null)], null);
-cljs.core.count.call(null,mrsudoku.model.conflict.values.call(null,mrsudoku.model.grid.block.call(null,mrsudoku.model.solver.grid,(1))));
 /**
  * take a graph, a start summit, a set of visited summits and a match and return a flag indicated if the augment succeed or not
  */
 mrsudoku.model.solver.augment = (function mrsudoku$model$solver$augment(var_args){
-var G__23486 = arguments.length;
-switch (G__23486) {
+var G__27975 = arguments.length;
+switch (G__27975) {
 case 4:
 return mrsudoku.model.solver.augment.cljs$core$IFn$_invoke$arity$4((arguments[(0)]),(arguments[(1)]),(arguments[(2)]),(arguments[(3)]));
 
@@ -99,26 +66,26 @@ var visited__$1 = visited;
 while(true){
 if(cljs.core.seq.call(null,dests)){
 if(cljs.core.truth_(just_visited.call(null,cljs.core.first.call(null,dests)))){
-var G__23491 = cljs.core.rest.call(null,dests);
-var G__23492 = visited__$1;
-dests = G__23491;
-visited__$1 = G__23492;
+var G__27980 = cljs.core.rest.call(null,dests);
+var G__27981 = visited__$1;
+dests = G__27980;
+visited__$1 = G__27981;
 continue;
 } else {
 var temp__5718__auto__ = cljs.core.get.call(null,match,cljs.core.first.call(null,dests));
 if(cljs.core.truth_(temp__5718__auto__)){
 var old_src = temp__5718__auto__;
-var vec__23487 = mrsudoku.model.solver.augment.call(null,graph,old_src,cljs.core.conj.call(null,visited__$1,cljs.core.first.call(null,dests)),match,cljs.core.conj.call(null,just_visited,cljs.core.first.call(null,dests)));
-var found = cljs.core.nth.call(null,vec__23487,(0),null);
-var visited_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__23487,(1),null);
-var match_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__23487,(2),null);
+var vec__27976 = mrsudoku.model.solver.augment.call(null,graph,old_src,cljs.core.conj.call(null,visited__$1,cljs.core.first.call(null,dests)),match,cljs.core.conj.call(null,just_visited,cljs.core.first.call(null,dests)));
+var found = cljs.core.nth.call(null,vec__27976,(0),null);
+var visited_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__27976,(1),null);
+var match_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__27976,(2),null);
 if(cljs.core.truth_(found)){
 return new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [true,visited_SINGLEQUOTE_,cljs.core.assoc.call(null,match_SINGLEQUOTE_,cljs.core.first.call(null,dests),src)], null);
 } else {
-var G__23493 = cljs.core.rest.call(null,dests);
-var G__23494 = visited_SINGLEQUOTE_;
-dests = G__23493;
-visited__$1 = G__23494;
+var G__27982 = cljs.core.rest.call(null,dests);
+var G__27983 = visited_SINGLEQUOTE_;
+dests = G__27982;
+visited__$1 = G__27983;
 continue;
 }
 } else {
@@ -140,16 +107,16 @@ var visited = cljs.core.PersistentHashSet.EMPTY;
 var match = cljs.core.PersistentArrayMap.EMPTY;
 while(true){
 if(cljs.core.seq.call(null,summits)){
-var vec__23495 = mrsudoku.model.solver.augment.call(null,graph,cljs.core.first.call(null,summits),visited,match);
-var found = cljs.core.nth.call(null,vec__23495,(0),null);
-var visited_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__23495,(1),null);
-var match_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__23495,(2),null);
-var G__23498 = cljs.core.rest.call(null,summits);
-var G__23499 = visited_SINGLEQUOTE_;
-var G__23500 = match_SINGLEQUOTE_;
-summits = G__23498;
-visited = G__23499;
-match = G__23500;
+var vec__27984 = mrsudoku.model.solver.augment.call(null,graph,cljs.core.first.call(null,summits),visited,match);
+var found = cljs.core.nth.call(null,vec__27984,(0),null);
+var visited_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__27984,(1),null);
+var match_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__27984,(2),null);
+var G__27987 = cljs.core.rest.call(null,summits);
+var G__27988 = visited_SINGLEQUOTE_;
+var G__27989 = match_SINGLEQUOTE_;
+summits = G__27987;
+visited = G__27988;
+match = G__27989;
 continue;
 } else {
 return match;
@@ -161,10 +128,10 @@ mrsudoku.model.solver.complete_matching_QMARK_ = (function mrsudoku$model$solver
 return cljs.core._EQ_.call(null,cljs.core.count.call(null,vars),cljs.core.count.call(null,match));
 });
 mrsudoku.model.solver.graph_with_matching = (function mrsudoku$model$solver$graph_with_matching(graph,match){
-return cljs.core.reduce.call(null,(function (mgraph,p__23501){
-var vec__23502 = p__23501;
-var src = cljs.core.nth.call(null,vec__23502,(0),null);
-var dest = cljs.core.nth.call(null,vec__23502,(1),null);
+return cljs.core.reduce.call(null,(function (mgraph,p__27990){
+var vec__27991 = p__27990;
+var src = cljs.core.nth.call(null,vec__27991,(0),null);
+var dest = cljs.core.nth.call(null,vec__27991,(1),null);
 return mrsudoku.model.grid.remove_edge.call(null,mrsudoku.model.grid.add_edge.call(null,mrsudoku.model.grid.add_vertex.call(null,mgraph,src),src,dest),dest,src);
 }),graph,match);
 });
@@ -176,8 +143,8 @@ return cljs.core.PersistentArrayMap.createAsIfByAssoc([cljs.core.first.call(null
 return cljs.core.PersistentArrayMap.EMPTY;
 }
 } else {
-var vars = clojure.set.select.call(null,(function (p1__23505_SHARP_){
-return cljs.core.contains_QMARK_.call(null,variables,p1__23505_SHARP_);
+var vars = clojure.set.select.call(null,(function (p1__27994_SHARP_){
+return cljs.core.contains_QMARK_.call(null,variables,p1__27994_SHARP_);
 }),comp);
 var values = clojure.set.difference.call(null,comp,vars);
 return cljs.core.zipmap.call(null,vars,cljs.core.repeat.call(null,values));
@@ -188,10 +155,10 @@ var scc__$1 = scc;
 var res = cljs.core.PersistentArrayMap.EMPTY;
 while(true){
 if(cljs.core.seq.call(null,scc__$1)){
-var G__23506 = cljs.core.rest.call(null,scc__$1);
-var G__23507 = cljs.core.merge.call(null,res,mrsudoku.model.solver.doms_from_sccomp.call(null,vars,cljs.core.first.call(null,scc__$1)));
-scc__$1 = G__23506;
-res = G__23507;
+var G__27995 = cljs.core.rest.call(null,scc__$1);
+var G__27996 = cljs.core.merge.call(null,res,mrsudoku.model.solver.doms_from_sccomp.call(null,vars,cljs.core.first.call(null,scc__$1)));
+scc__$1 = G__27995;
+res = G__27996;
 continue;
 } else {
 return res;
@@ -203,8 +170,8 @@ break;
  * Depth-First Search algorithm
  */
 mrsudoku.model.solver.dfs = (function mrsudoku$model$solver$dfs(var_args){
-var G__23509 = arguments.length;
-switch (G__23509) {
+var G__27998 = arguments.length;
+switch (G__27998) {
 case 4:
 return mrsudoku.model.solver.dfs.cljs$core$IFn$_invoke$arity$4((arguments[(0)]),(arguments[(1)]),(arguments[(2)]),(arguments[(3)]));
 
@@ -232,15 +199,15 @@ var res = f.call(null,init,vert);
 var visited__$1 = cljs.core.conj.call(null,visited,vert);
 while(true){
 if(cljs.core.seq.call(null,verts)){
-var vec__23510 = mrsudoku.model.solver.dfs.call(null,graph,cljs.core.first.call(null,verts),f,res,visited__$1);
-var res_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__23510,(0),null);
-var visited_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__23510,(1),null);
-var G__23514 = cljs.core.rest.call(null,verts);
-var G__23515 = res_SINGLEQUOTE_;
-var G__23516 = visited_SINGLEQUOTE_;
-verts = G__23514;
-res = G__23515;
-visited__$1 = G__23516;
+var vec__27999 = mrsudoku.model.solver.dfs.call(null,graph,cljs.core.first.call(null,verts),f,res,visited__$1);
+var res_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__27999,(0),null);
+var visited_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__27999,(1),null);
+var G__28003 = cljs.core.rest.call(null,verts);
+var G__28004 = res_SINGLEQUOTE_;
+var G__28005 = visited_SINGLEQUOTE_;
+verts = G__28003;
+res = G__28004;
+visited__$1 = G__28005;
 continue;
 } else {
 return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [res,visited__$1], null);
@@ -253,8 +220,8 @@ break;
 mrsudoku.model.solver.dfs.cljs$lang$maxFixedArity = 5;
 
 mrsudoku.model.solver.dfs_post = (function mrsudoku$model$solver$dfs_post(var_args){
-var G__23518 = arguments.length;
-switch (G__23518) {
+var G__28007 = arguments.length;
+switch (G__28007) {
 case 4:
 return mrsudoku.model.solver.dfs_post.cljs$core$IFn$_invoke$arity$4((arguments[(0)]),(arguments[(1)]),(arguments[(2)]),(arguments[(3)]));
 
@@ -282,15 +249,15 @@ var res = init;
 var visited__$1 = cljs.core.conj.call(null,visited,vert);
 while(true){
 if(cljs.core.seq.call(null,verts)){
-var vec__23519 = mrsudoku.model.solver.dfs_post.call(null,graph,cljs.core.first.call(null,verts),f,res,visited__$1);
-var res_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__23519,(0),null);
-var visited_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__23519,(1),null);
-var G__23523 = cljs.core.rest.call(null,verts);
-var G__23524 = res_SINGLEQUOTE_;
-var G__23525 = visited_SINGLEQUOTE_;
-verts = G__23523;
-res = G__23524;
-visited__$1 = G__23525;
+var vec__28008 = mrsudoku.model.solver.dfs_post.call(null,graph,cljs.core.first.call(null,verts),f,res,visited__$1);
+var res_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__28008,(0),null);
+var visited_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__28008,(1),null);
+var G__28012 = cljs.core.rest.call(null,verts);
+var G__28013 = res_SINGLEQUOTE_;
+var G__28014 = visited_SINGLEQUOTE_;
+verts = G__28012;
+res = G__28013;
+visited__$1 = G__28014;
 continue;
 } else {
 return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [f.call(null,res,vert),visited__$1], null);
@@ -308,15 +275,15 @@ var stack = cljs.core.List.EMPTY;
 var visited = cljs.core.PersistentHashSet.EMPTY;
 while(true){
 if(cljs.core.seq.call(null,verts)){
-var vec__23526 = mrsudoku.model.solver.dfs_post.call(null,graph,cljs.core.first.call(null,verts),cljs.core.conj,stack,visited);
-var stack_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__23526,(0),null);
-var visited_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__23526,(1),null);
-var G__23529 = cljs.core.rest.call(null,verts);
-var G__23530 = stack_SINGLEQUOTE_;
-var G__23531 = visited_SINGLEQUOTE_;
-verts = G__23529;
-stack = G__23530;
-visited = G__23531;
+var vec__28015 = mrsudoku.model.solver.dfs_post.call(null,graph,cljs.core.first.call(null,verts),cljs.core.conj,stack,visited);
+var stack_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__28015,(0),null);
+var visited_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__28015,(1),null);
+var G__28018 = cljs.core.rest.call(null,verts);
+var G__28019 = stack_SINGLEQUOTE_;
+var G__28020 = visited_SINGLEQUOTE_;
+verts = G__28018;
+stack = G__28019;
+visited = G__28020;
 continue;
 } else {
 return stack;
@@ -329,22 +296,22 @@ var s = edges2;
 var m = edges1;
 while(true){
 if(cljs.core.seq.call(null,s)){
-var vec__23532 = cljs.core.first.call(null,s);
-var k = cljs.core.nth.call(null,vec__23532,(0),null);
-var v2 = cljs.core.nth.call(null,vec__23532,(1),null);
+var vec__28021 = cljs.core.first.call(null,s);
+var k = cljs.core.nth.call(null,vec__28021,(0),null);
+var v2 = cljs.core.nth.call(null,vec__28021,(1),null);
 var temp__5718__auto__ = cljs.core.get.call(null,m,k);
 if(cljs.core.truth_(temp__5718__auto__)){
 var v1 = temp__5718__auto__;
-var G__23535 = cljs.core.rest.call(null,s);
-var G__23536 = cljs.core.assoc.call(null,m,k,clojure.set.union.call(null,v1,v2));
-s = G__23535;
-m = G__23536;
+var G__28024 = cljs.core.rest.call(null,s);
+var G__28025 = cljs.core.assoc.call(null,m,k,clojure.set.union.call(null,v1,v2));
+s = G__28024;
+m = G__28025;
 continue;
 } else {
-var G__23537 = cljs.core.rest.call(null,s);
-var G__23538 = cljs.core.assoc.call(null,m,k,v2);
-s = G__23537;
-m = G__23538;
+var G__28026 = cljs.core.rest.call(null,s);
+var G__28027 = cljs.core.assoc.call(null,m,k,v2);
+s = G__28026;
+m = G__28027;
 continue;
 }
 } else {
@@ -373,10 +340,10 @@ var ks = cljs.core.keys.call(null,graph);
 var res = cljs.core.PersistentArrayMap.EMPTY;
 while(true){
 if(cljs.core.seq.call(null,ks)){
-var G__23539 = cljs.core.rest.call(null,ks);
-var G__23540 = mrsudoku.model.solver.merge_edges.call(null,res,mrsudoku.model.solver.inv_edges.call(null,cljs.core.first.call(null,ks),cljs.core.get.call(null,graph,cljs.core.first.call(null,ks))));
-ks = G__23539;
-res = G__23540;
+var G__28028 = cljs.core.rest.call(null,ks);
+var G__28029 = mrsudoku.model.solver.merge_edges.call(null,res,mrsudoku.model.solver.inv_edges.call(null,cljs.core.first.call(null,ks),cljs.core.get.call(null,graph,cljs.core.first.call(null,ks))));
+ks = G__28028;
+res = G__28029;
 continue;
 } else {
 return mrsudoku.model.solver.sinks.call(null,res,cljs.core.keys.call(null,graph));
@@ -393,23 +360,23 @@ var res = cljs.core.PersistentVector.EMPTY;
 while(true){
 if(cljs.core.seq.call(null,s)){
 if(cljs.core.truth_(visited.call(null,cljs.core.first.call(null,s)))){
-var G__23544 = cljs.core.rest.call(null,s);
-var G__23545 = visited;
-var G__23546 = res;
-s = G__23544;
-visited = G__23545;
-res = G__23546;
+var G__28033 = cljs.core.rest.call(null,s);
+var G__28034 = visited;
+var G__28035 = res;
+s = G__28033;
+visited = G__28034;
+res = G__28035;
 continue;
 } else {
-var vec__23541 = mrsudoku.model.solver.dfs_post.call(null,t_graph,cljs.core.first.call(null,s),cljs.core.conj,cljs.core.PersistentHashSet.EMPTY,visited);
-var comp = cljs.core.nth.call(null,vec__23541,(0),null);
-var visited_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__23541,(1),null);
-var G__23547 = cljs.core.rest.call(null,s);
-var G__23548 = visited_SINGLEQUOTE_;
-var G__23549 = cljs.core.conj.call(null,res,comp);
-s = G__23547;
-visited = G__23548;
-res = G__23549;
+var vec__28030 = mrsudoku.model.solver.dfs_post.call(null,t_graph,cljs.core.first.call(null,s),cljs.core.conj,cljs.core.PersistentHashSet.EMPTY,visited);
+var comp = cljs.core.nth.call(null,vec__28030,(0),null);
+var visited_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__28030,(1),null);
+var G__28036 = cljs.core.rest.call(null,s);
+var G__28037 = visited_SINGLEQUOTE_;
+var G__28038 = cljs.core.conj.call(null,res,comp);
+s = G__28036;
+visited = G__28037;
+res = G__28038;
 continue;
 }
 } else {
@@ -419,15 +386,15 @@ break;
 }
 });
 mrsudoku.model.solver.isolated_values = (function mrsudoku$model$solver$isolated_values(variables,scc){
-return cljs.core.into.call(null,cljs.core.PersistentHashSet.EMPTY,cljs.core.map.call(null,cljs.core.first,cljs.core.filter.call(null,(function (p1__23550_SHARP_){
-return ((cljs.core._EQ_.call(null,cljs.core.count.call(null,p1__23550_SHARP_),(1))) && (cljs.core.not.call(null,variables.call(null,cljs.core.first.call(null,p1__23550_SHARP_)))));
+return cljs.core.into.call(null,cljs.core.PersistentHashSet.EMPTY,cljs.core.map.call(null,cljs.core.first,cljs.core.filter.call(null,(function (p1__28039_SHARP_){
+return ((cljs.core._EQ_.call(null,cljs.core.count.call(null,p1__28039_SHARP_),(1))) && (cljs.core.not.call(null,variables.call(null,cljs.core.first.call(null,p1__28039_SHARP_)))));
 }),scc)));
 });
 mrsudoku.model.solver.values_known_by = (function mrsudoku$model$solver$values_known_by(doms,value){
-return cljs.core.reduce.call(null,(function (res,p__23551){
-var vec__23552 = p__23551;
-var v = cljs.core.nth.call(null,vec__23552,(0),null);
-var values = cljs.core.nth.call(null,vec__23552,(1),null);
+return cljs.core.reduce.call(null,(function (res,p__28040){
+var vec__28041 = p__28040;
+var v = cljs.core.nth.call(null,vec__28041,(0),null);
+var values = cljs.core.nth.call(null,vec__28041,(1),null);
 if(cljs.core.contains_QMARK_.call(null,values,value)){
 return cljs.core.conj.call(null,res,v);
 } else {
@@ -440,14 +407,14 @@ var s = vs;
 var res = doms;
 while(true){
 if(cljs.core.seq.call(null,s)){
-var G__23557 = cljs.core.rest.call(null,s);
-var G__23558 = cljs.core.update.call(null,res,cljs.core.first.call(null,s),((function (s,res){
-return (function (p1__23556_SHARP_){
-return cljs.core.conj.call(null,p1__23556_SHARP_,value);
+var G__28046 = cljs.core.rest.call(null,s);
+var G__28047 = cljs.core.update.call(null,res,cljs.core.first.call(null,s),((function (s,res){
+return (function (p1__28045_SHARP_){
+return cljs.core.conj.call(null,p1__28045_SHARP_,value);
 });})(s,res))
 );
-s = G__23557;
-res = G__23558;
+s = G__28046;
+res = G__28047;
 continue;
 } else {
 return res;
@@ -526,16 +493,16 @@ var offset_y = ((((var_num - (1)) / (3)) | (0)) + (1));
 var y = ((((index - (1)) / (3)) | (0)) * (3));
 var offset_x = ((cljs.core.mod.call(null,(var_num - (1)),(3)) | (0)) + (1));
 var x = ((cljs.core.mod.call(null,(index - (1)),(3)) | (0)) * (3));
-var G__23559 = cljs.core.rest.call(null,s);
-var G__23560 = mrsudoku.model.grid.change_cell.call(null,mygrid,(x + offset_x),(y + offset_y),mrsudoku.model.grid.mk_cell.call(null,cljs.core.first.call(null,cljs.core.val.call(null,cljs.core.first.call(null,s)))));
-s = G__23559;
-mygrid = G__23560;
+var G__28048 = cljs.core.rest.call(null,s);
+var G__28049 = mrsudoku.model.grid.change_cell.call(null,mygrid,(x + offset_x),(y + offset_y),mrsudoku.model.grid.mk_cell.call(null,cljs.core.first.call(null,cljs.core.val.call(null,cljs.core.first.call(null,s)))));
+s = G__28048;
+mygrid = G__28049;
 continue;
 } else {
-var G__23561 = cljs.core.rest.call(null,s);
-var G__23562 = mygrid;
-s = G__23561;
-mygrid = G__23562;
+var G__28050 = cljs.core.rest.call(null,s);
+var G__28051 = mygrid;
+s = G__28050;
+mygrid = G__28051;
 continue;
 }
 } else {
@@ -559,20 +526,20 @@ var offset_y = ((((var_num - (1)) / (3)) | (0)) + (1));
 var y = ((((index - (1)) / (3)) | (0)) * (3));
 var offset_x = ((cljs.core.mod.call(null,(var_num - (1)),(3)) | (0)) + (1));
 var x = ((cljs.core.mod.call(null,(index - (1)),(3)) | (0)) * (3));
-var G__23563 = cljs.core.rest.call(null,s);
-var G__23564 = mrsudoku.model.grid.change_cell.call(null,mygrid,(x + offset_x),(y + offset_y),mrsudoku.model.grid.mk_cell.call(null,cljs.core.first.call(null,cljs.core.val.call(null,cljs.core.first.call(null,s)))));
-var G__23565 = true;
-s = G__23563;
-mygrid = G__23564;
-fixed = G__23565;
+var G__28052 = cljs.core.rest.call(null,s);
+var G__28053 = mrsudoku.model.grid.change_cell.call(null,mygrid,(x + offset_x),(y + offset_y),mrsudoku.model.grid.mk_cell.call(null,cljs.core.first.call(null,cljs.core.val.call(null,cljs.core.first.call(null,s)))));
+var G__28054 = true;
+s = G__28052;
+mygrid = G__28053;
+fixed = G__28054;
 continue;
 } else {
-var G__23566 = cljs.core.rest.call(null,s);
-var G__23567 = mygrid;
-var G__23568 = fixed;
-s = G__23566;
-mygrid = G__23567;
-fixed = G__23568;
+var G__28055 = cljs.core.rest.call(null,s);
+var G__28056 = mygrid;
+var G__28057 = fixed;
+s = G__28055;
+mygrid = G__28056;
+fixed = G__28057;
 continue;
 }
 } else {
@@ -592,12 +559,12 @@ while(true){
 if(cljs.core.not.call(null,finish)){
 var alldiff_doms = mrsudoku.model.solver.alldiff.call(null,mrsudoku.model.solver.to_var_block.call(null,mygrid,index));
 if(cljs.core.truth_(alldiff_doms)){
-var G__23569 = mrsudoku.model.solver.fix_singleton.call(null,mygrid,index,alldiff_doms);
-var G__23570 = (cljs.core.mod.call(null,index,(9)) + (1));
-var G__23571 = mrsudoku.model.conflict.grid_resolu_QMARK_.call(null,mygrid);
-mygrid = G__23569;
-index = G__23570;
-finish = G__23571;
+var G__28058 = mrsudoku.model.solver.fix_singleton.call(null,mygrid,index,alldiff_doms);
+var G__28059 = (cljs.core.mod.call(null,index,(9)) + (1));
+var G__28060 = mrsudoku.model.conflict.grid_resolu_QMARK_.call(null,mygrid);
+mygrid = G__28058;
+index = G__28059;
+finish = G__28060;
 continue;
 } else {
 return null;
@@ -619,21 +586,21 @@ while(true){
 if((index < (10))){
 var alldiff_doms = mrsudoku.model.solver.alldiff.call(null,mrsudoku.model.solver.to_var_block.call(null,mygrid,index));
 if(cljs.core.truth_(alldiff_doms)){
-var vec__23572 = mrsudoku.model.solver.fix_singleton2.call(null,mygrid,index,alldiff_doms);
-var newgrid = cljs.core.nth.call(null,vec__23572,(0),null);
-var isfixed = cljs.core.nth.call(null,vec__23572,(1),null);
-var G__23575 = newgrid;
-var G__23576 = (index + (1));
-var G__23577 = (function (){var or__3949__auto__ = fixed;
+var vec__28061 = mrsudoku.model.solver.fix_singleton2.call(null,mygrid,index,alldiff_doms);
+var newgrid = cljs.core.nth.call(null,vec__28061,(0),null);
+var isfixed = cljs.core.nth.call(null,vec__28061,(1),null);
+var G__28064 = newgrid;
+var G__28065 = (index + (1));
+var G__28066 = (function (){var or__3949__auto__ = fixed;
 if(or__3949__auto__){
 return or__3949__auto__;
 } else {
 return isfixed;
 }
 })();
-mygrid = G__23575;
-index = G__23576;
-fixed = G__23577;
+mygrid = G__28064;
+index = G__28065;
+fixed = G__28066;
 continue;
 } else {
 return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [null,false], null);
@@ -652,8 +619,8 @@ var alldiff_doms = mrsudoku.model.solver.to_var_block.call(null,grid,index);
 if((cljs.core.count.call(null,alldiff_doms) > (0))){
 return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [index,cljs.core.first.call(null,alldiff_doms)], null);
 } else {
-var G__23578 = (index + (1));
-index = G__23578;
+var G__28067 = (index + (1));
+index = G__28067;
 continue;
 }
 } else {
@@ -670,43 +637,43 @@ while(true){
 if((index < (10))){
 var alldiff_doms = mrsudoku.model.solver.to_var_block.call(null,grid,index);
 if((cljs.core.count.call(null,alldiff_doms) > (0))){
-var s_23579 = alldiff_doms;
-var best2_23580 = cljs.core.first.call(null,alldiff_doms);
+var s_28068 = alldiff_doms;
+var best2_28069 = cljs.core.first.call(null,alldiff_doms);
 while(true){
-if(cljs.core.seq.call(null,s_23579)){
-if((cljs.core.count.call(null,cljs.core.val.call(null,cljs.core.first.call(null,s_23579))) < cljs.core.count.call(null,cljs.core.val.call(null,best2_23580)))){
-var G__23581 = cljs.core.rest.call(null,s_23579);
-var G__23582 = cljs.core.first.call(null,s_23579);
-s_23579 = G__23581;
-best2_23580 = G__23582;
+if(cljs.core.seq.call(null,s_28068)){
+if((cljs.core.count.call(null,cljs.core.val.call(null,cljs.core.first.call(null,s_28068))) < cljs.core.count.call(null,cljs.core.val.call(null,best2_28069)))){
+var G__28070 = cljs.core.rest.call(null,s_28068);
+var G__28071 = cljs.core.first.call(null,s_28068);
+s_28068 = G__28070;
+best2_28069 = G__28071;
 continue;
 } else {
-var G__23583 = cljs.core.rest.call(null,s_23579);
-var G__23584 = best2_23580;
-s_23579 = G__23583;
-best2_23580 = G__23584;
+var G__28072 = cljs.core.rest.call(null,s_28068);
+var G__28073 = best2_28069;
+s_28068 = G__28072;
+best2_28069 = G__28073;
 continue;
 }
 } else {
-mrsudoku.model.solver.best2 = best2_23580;
+mrsudoku.model.solver.best2 = best2_28069;
 }
 break;
 }
 
-var G__23585 = (index + (1));
-var G__23586 = index;
-var G__23587 = mrsudoku.model.solver.best2;
-index = G__23585;
-myindex = G__23586;
-best = G__23587;
+var G__28074 = (index + (1));
+var G__28075 = index;
+var G__28076 = mrsudoku.model.solver.best2;
+index = G__28074;
+myindex = G__28075;
+best = G__28076;
 continue;
 } else {
-var G__23588 = (index + (1));
-var G__23589 = myindex;
-var G__23590 = best;
-index = G__23588;
-myindex = G__23589;
-best = G__23590;
+var G__28077 = (index + (1));
+var G__28078 = myindex;
+var G__28079 = best;
+index = G__28077;
+myindex = G__28078;
+best = G__28079;
 continue;
 }
 } else {
@@ -715,8 +682,6 @@ return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMP
 break;
 }
 });
-mrsudoku.model.solver.hardgrid = new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null,(8)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(3)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(7)),mrsudoku.model.grid.mk_cell.call(null)], null),new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(6)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(9)),mrsudoku.model.grid.mk_cell.call(null)], null),new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(2)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null)], null)], null),new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(5)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null)], null),new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(7)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(4)),mrsudoku.model.grid.mk_cell.call(null,(5)),mrsudoku.model.grid.mk_cell.call(null,(1)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null)], null),new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(7)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(3)),mrsudoku.model.grid.mk_cell.call(null)], null)], null),new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(1)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(8)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(9)),mrsudoku.model.grid.mk_cell.call(null)], null),new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(5)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null)], null),new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(6)),mrsudoku.model.grid.mk_cell.call(null,(8)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(1)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null,(4)),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null)], null)], null)], null);
-mrsudoku.model.solver.emptygrid = new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null)], null),new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null)], null),new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null)], null)], null),new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null)], null),new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null)], null),new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null)], null)], null),new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null)], null),new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null)], null),new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null)], null)], null)], null);
 mrsudoku.model.solver.fix_value = (function mrsudoku$model$solver$fix_value(grid,index,var$,val){
 var var_num = mrsudoku.model.solver.manuel_parse.call(null,cljs.core.subs.call(null,[cljs.core.str.cljs$core$IFn$_invoke$arity$1(var$)].join(''),(2)));
 var offset_y = ((((var_num - (1)) / (3)) | (0)) + (1));
@@ -732,31 +697,31 @@ var fixed = true;
 while(true){
 if(cljs.core.not.call(null,finish)){
 if(fixed){
-var vec__23591 = mrsudoku.model.solver.solve_once.call(null,mygrid);
-var grid_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__23591,(0),null);
-var fixed_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__23591,(1),null);
+var vec__28080 = mrsudoku.model.solver.solve_once.call(null,mygrid);
+var grid_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__28080,(0),null);
+var fixed_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__28080,(1),null);
 if((grid_SINGLEQUOTE_ == null)){
 return null;
 } else {
-var G__23597 = grid_SINGLEQUOTE_;
-var G__23598 = mrsudoku.model.conflict.grid_resolu_QMARK_.call(null,grid_SINGLEQUOTE_);
-var G__23599 = fixed_SINGLEQUOTE_;
-mygrid = G__23597;
-finish = G__23598;
-fixed = G__23599;
+var G__28086 = grid_SINGLEQUOTE_;
+var G__28087 = mrsudoku.model.conflict.grid_resolu_QMARK_.call(null,grid_SINGLEQUOTE_);
+var G__28088 = fixed_SINGLEQUOTE_;
+mygrid = G__28086;
+finish = G__28087;
+fixed = G__28088;
 continue;
 }
 } else {
-var vec__23594 = mrsudoku.model.solver.strat_best.call(null,mygrid);
-var index = cljs.core.nth.call(null,vec__23594,(0),null);
-var doms = cljs.core.nth.call(null,vec__23594,(1),null);
+var vec__28083 = mrsudoku.model.solver.strat_best.call(null,mygrid);
+var index = cljs.core.nth.call(null,vec__28083,(0),null);
+var doms = cljs.core.nth.call(null,vec__28083,(1),null);
 var s = cljs.core.second.call(null,doms);
 while(true){
 if(cljs.core.seq.call(null,s)){
 var newgrid = mrsudoku.model.solver.solver_cpx.call(null,mrsudoku.model.solver.fix_value.call(null,mygrid,index,cljs.core.first.call(null,doms),cljs.core.first.call(null,s)));
 if((newgrid == null)){
-var G__23600 = cljs.core.rest.call(null,s);
-s = G__23600;
+var G__28089 = cljs.core.rest.call(null,s);
+s = G__28089;
 continue;
 } else {
 return newgrid;
@@ -794,33 +759,33 @@ var fixed = true;
 while(true){
 if(cljs.core.not.call(null,finish)){
 if(fixed){
-var vec__23601 = mrsudoku.model.solver.solve_once.call(null,mygrid);
-var grid_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__23601,(0),null);
-var fixed_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__23601,(1),null);
+var vec__28090 = mrsudoku.model.solver.solve_once.call(null,mygrid);
+var grid_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__28090,(0),null);
+var fixed_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__28090,(1),null);
 if((grid_SINGLEQUOTE_ == null)){
 return (0);
 } else {
-var G__23607 = grid_SINGLEQUOTE_;
-var G__23608 = mrsudoku.model.conflict.grid_resolu_QMARK_.call(null,grid_SINGLEQUOTE_);
-var G__23609 = fixed_SINGLEQUOTE_;
-mygrid = G__23607;
-finish = G__23608;
-fixed = G__23609;
+var G__28096 = grid_SINGLEQUOTE_;
+var G__28097 = mrsudoku.model.conflict.grid_resolu_QMARK_.call(null,grid_SINGLEQUOTE_);
+var G__28098 = fixed_SINGLEQUOTE_;
+mygrid = G__28096;
+finish = G__28097;
+fixed = G__28098;
 continue;
 }
 } else {
-var vec__23604 = mrsudoku.model.solver.strat_best.call(null,mygrid);
-var index = cljs.core.nth.call(null,vec__23604,(0),null);
-var doms = cljs.core.nth.call(null,vec__23604,(1),null);
+var vec__28093 = mrsudoku.model.solver.strat_best.call(null,mygrid);
+var index = cljs.core.nth.call(null,vec__28093,(0),null);
+var doms = cljs.core.nth.call(null,vec__28093,(1),null);
 var s = cljs.core.second.call(null,doms);
 var solutions = (0);
 while(true){
 if(cljs.core.seq.call(null,s)){
 if((solutions < (2))){
-var G__23610 = cljs.core.rest.call(null,s);
-var G__23611 = (solutions + mrsudoku.model.solver.nombre_solutions.call(null,mrsudoku.model.solver.fix_value.call(null,mygrid,index,cljs.core.first.call(null,doms),cljs.core.first.call(null,s))));
-s = G__23610;
-solutions = G__23611;
+var G__28099 = cljs.core.rest.call(null,s);
+var G__28100 = (solutions + mrsudoku.model.solver.nombre_solutions.call(null,mrsudoku.model.solver.fix_value.call(null,mygrid,index,cljs.core.first.call(null,doms),cljs.core.first.call(null,s))));
+s = G__28099;
+solutions = G__28100;
 continue;
 } else {
 return solutions;
@@ -840,14 +805,26 @@ break;
 mrsudoku.model.solver.one_solution_QMARK_ = (function mrsudoku$model$solver$one_solution_QMARK_(grid){
 return cljs.core._EQ_.call(null,(1),mrsudoku.model.solver.nombre_solutions.call(null,grid));
 });
+mrsudoku.model.solver.emptygrid = new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null)], null),new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null)], null),new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null)], null)], null),new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null)], null),new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null)], null),new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null)], null)], null),new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null)], null),new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null)], null),new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null),mrsudoku.model.grid.mk_cell.call(null)], null)], null)], null);
 mrsudoku.model.solver.generate_grid = (function mrsudoku$model$solver$generate_grid(){
 var mygrid = mrsudoku.model.solver.solver_cpx.call(null,mrsudoku.model.solver.random_fix.call(null,mrsudoku.model.solver.emptygrid));
+var chance = (0);
 while(true){
+if((chance < (3))){
 var newgrid = mrsudoku.model.solver.random_clear.call(null,mygrid);
 if(cljs.core.truth_(mrsudoku.model.solver.one_solution_QMARK_.call(null,newgrid))){
-var G__23612 = newgrid;
-mygrid = G__23612;
+var G__28101 = newgrid;
+var G__28102 = chance;
+mygrid = G__28101;
+chance = G__28102;
 continue;
+} else {
+var G__28103 = mygrid;
+var G__28104 = (chance + (1));
+mygrid = G__28103;
+chance = G__28104;
+continue;
+}
 } else {
 return mygrid;
 }
@@ -859,6 +836,9 @@ break;
  *  or `nil` if the solver fails.
  */
 mrsudoku.model.solver.solve = (function mrsudoku$model$solver$solve(grid){
+return mrsudoku.model.solver.solver_cpx.call(null,grid);
+});
+mrsudoku.model.solver.generate = (function mrsudoku$model$solver$generate(grid){
 return mrsudoku.model.solver.generate_grid.call(null);
 });
 

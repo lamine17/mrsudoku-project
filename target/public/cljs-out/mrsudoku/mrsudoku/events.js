@@ -9,13 +9,13 @@ goog.require('mrsudoku.model.solver');
 re_frame.core.reg_event_db.call(null,new cljs.core.Keyword(null,"initialize","initialize",609952913),(function (_,___$1){
 return mrsudoku.db.default_db;
 }));
-re_frame.core.reg_event_db.call(null,new cljs.core.Keyword(null,"cell-value-changed","cell-value-changed",-452878054),(function (db,p__23615){
-var vec__23616 = p__23615;
-var _ = cljs.core.nth.call(null,vec__23616,(0),null);
-var vec__23619 = cljs.core.nth.call(null,vec__23616,(1),null);
-var newval = cljs.core.nth.call(null,vec__23619,(0),null);
-var cell_col = cljs.core.nth.call(null,vec__23619,(1),null);
-var cell_row = cljs.core.nth.call(null,vec__23619,(2),null);
+re_frame.core.reg_event_db.call(null,new cljs.core.Keyword(null,"cell-value-changed","cell-value-changed",-452878054),(function (db,p__28107){
+var vec__28108 = p__28107;
+var _ = cljs.core.nth.call(null,vec__28108,(0),null);
+var vec__28111 = cljs.core.nth.call(null,vec__28108,(1),null);
+var newval = cljs.core.nth.call(null,vec__28111,(0),null);
+var cell_col = cljs.core.nth.call(null,vec__28111,(1),null);
+var cell_row = cljs.core.nth.call(null,vec__28111,(2),null);
 var nval = parseInt(newval);
 var val_ok_QMARK_ = ((((1) <= nval)) && ((nval <= (9))));
 var grid = mrsudoku.model.grid.change_cell.call(null,new cljs.core.Keyword(null,"grid","grid",402978600).cljs$core$IFn$_invoke$arity$1(db),cell_col,cell_row,((val_ok_QMARK_)?mrsudoku.model.grid.mk_cell.call(null,new cljs.core.Keyword(null,"set","set",304602554),nval):mrsudoku.model.grid.mk_cell.call(null)));
@@ -31,6 +31,15 @@ return cljs.core.assoc.call(null,db,new cljs.core.Keyword(null,"grid","grid",402
 alert("Cannot solve Sudoku");
 
 return db;
+}
+}));
+re_frame.core.reg_event_db.call(null,new cljs.core.Keyword(null,"generate","generate",-163452822),(function (db,_){
+var temp__5718__auto__ = mrsudoku.model.solver.generate.call(null,new cljs.core.Keyword(null,"grid","grid",402978600).cljs$core$IFn$_invoke$arity$1(db));
+if(cljs.core.truth_(temp__5718__auto__)){
+var grid_SINGLEQUOTE_ = temp__5718__auto__;
+return cljs.core.assoc.call(null,db,new cljs.core.Keyword(null,"grid","grid",402978600),grid_SINGLEQUOTE_,new cljs.core.Keyword(null,"conflicts","conflicts",-1219561816),cljs.core.PersistentArrayMap.EMPTY);
+} else {
+return null;
 }
 }));
 

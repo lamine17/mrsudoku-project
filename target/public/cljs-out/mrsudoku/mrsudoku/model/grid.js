@@ -7,8 +7,8 @@ goog.require('mrsudoku.utils');
  * Create a new cell.
  */
 mrsudoku.model.grid.mk_cell = (function mrsudoku$model$grid$mk_cell(var_args){
-var G__9160 = arguments.length;
-switch (G__9160) {
+var G__9457 = arguments.length;
+switch (G__9457) {
 case 0:
 return mrsudoku.model.grid.mk_cell.cljs$core$IFn$_invoke$arity$0();
 
@@ -42,9 +42,9 @@ return new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"st
 mrsudoku.model.grid.mk_cell.cljs$lang$maxFixedArity = 2;
 
 mrsudoku.model.grid.cell_value = (function mrsudoku$model$grid$cell_value(cell){
-var G__9162 = new cljs.core.Keyword(null,"status","status",-1997798413).cljs$core$IFn$_invoke$arity$1(cell);
-var G__9162__$1 = (((G__9162 instanceof cljs.core.Keyword))?G__9162.fqn:null);
-switch (G__9162__$1) {
+var G__9459 = new cljs.core.Keyword(null,"status","status",-1997798413).cljs$core$IFn$_invoke$arity$1(cell);
+var G__9459__$1 = (((G__9459 instanceof cljs.core.Keyword))?G__9459.fqn:null);
+switch (G__9459__$1) {
 case "init":
 case "set":
 case "solved":
@@ -109,21 +109,21 @@ return cell;
 );
 });
 mrsudoku.model.grid.cell__GT_str = (function mrsudoku$model$grid$cell__GT_str(cell){
-var pred__9164 = cljs.core._EQ_;
-var expr__9165 = new cljs.core.Keyword(null,"status","status",-1997798413).cljs$core$IFn$_invoke$arity$1(cell);
-if(cljs.core.truth_(pred__9164.call(null,new cljs.core.Keyword(null,"init","init",-1875481434),expr__9165))){
+var pred__9461 = cljs.core._EQ_;
+var expr__9462 = new cljs.core.Keyword(null,"status","status",-1997798413).cljs$core$IFn$_invoke$arity$1(cell);
+if(cljs.core.truth_(pred__9461.call(null,new cljs.core.Keyword(null,"init","init",-1875481434),expr__9462))){
 return [" ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(new cljs.core.Keyword(null,"value","value",305978217).cljs$core$IFn$_invoke$arity$1(cell))," "].join('');
 } else {
-if(cljs.core.truth_(pred__9164.call(null,new cljs.core.Keyword(null,"empty","empty",767870958),expr__9165))){
+if(cljs.core.truth_(pred__9461.call(null,new cljs.core.Keyword(null,"empty","empty",767870958),expr__9462))){
 return " . ";
 } else {
-if(cljs.core.truth_(pred__9164.call(null,new cljs.core.Keyword(null,"set","set",304602554),expr__9165))){
+if(cljs.core.truth_(pred__9461.call(null,new cljs.core.Keyword(null,"set","set",304602554),expr__9462))){
 return ["[",cljs.core.str.cljs$core$IFn$_invoke$arity$1(new cljs.core.Keyword(null,"value","value",305978217).cljs$core$IFn$_invoke$arity$1(cell)),"]"].join('');
 } else {
-if(cljs.core.truth_(pred__9164.call(null,new cljs.core.Keyword(null,"conflict","conflict",1978796605),expr__9165))){
+if(cljs.core.truth_(pred__9461.call(null,new cljs.core.Keyword(null,"conflict","conflict",1978796605),expr__9462))){
 return ["!",cljs.core.str.cljs$core$IFn$_invoke$arity$1(new cljs.core.Keyword(null,"value","value",305978217).cljs$core$IFn$_invoke$arity$1(cell)),"!"].join('');
 } else {
-throw (new Error(["No matching clause: ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(expr__9165)].join('')));
+throw (new Error(["No matching clause: ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(expr__9462)].join('')));
 }
 }
 }
@@ -159,7 +159,7 @@ while(true){
 if(cljs.core._EQ_.call(null,yoffset,(3))){
 return acc;
 } else {
-var vec__9167 = (function (){var xoffset = (0);
+var vec__9464 = (function (){var xoffset = (0);
 var index__$1 = index;
 var cells__$1 = cells;
 var acc__$1 = acc;
@@ -167,30 +167,30 @@ while(true){
 if(cljs.core._EQ_.call(null,xoffset,(3))){
 return new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [acc__$1,cells__$1,index__$1], null);
 } else {
-var G__9170 = (xoffset + (1));
-var G__9171 = (index__$1 + (1));
-var G__9172 = cljs.core.rest.call(null,cells__$1);
-var G__9173 = f.call(null,acc__$1,index__$1,((bx + xoffset) + (1)),((by + yoffset) + (1)),cljs.core.first.call(null,cells__$1));
-xoffset = G__9170;
-index__$1 = G__9171;
-cells__$1 = G__9172;
-acc__$1 = G__9173;
+var G__9467 = (xoffset + (1));
+var G__9468 = (index__$1 + (1));
+var G__9469 = cljs.core.rest.call(null,cells__$1);
+var G__9470 = f.call(null,acc__$1,index__$1,((bx + xoffset) + (1)),((by + yoffset) + (1)),cljs.core.first.call(null,cells__$1));
+xoffset = G__9467;
+index__$1 = G__9468;
+cells__$1 = G__9469;
+acc__$1 = G__9470;
 continue;
 }
 break;
 }
 })();
-var nacc = cljs.core.nth.call(null,vec__9167,(0),null);
-var ncells = cljs.core.nth.call(null,vec__9167,(1),null);
-var nindex = cljs.core.nth.call(null,vec__9167,(2),null);
-var G__9174 = (yoffset + (1));
-var G__9175 = nindex;
-var G__9176 = ncells;
-var G__9177 = nacc;
-yoffset = G__9174;
-index = G__9175;
-cells = G__9176;
-acc = G__9177;
+var nacc = cljs.core.nth.call(null,vec__9464,(0),null);
+var ncells = cljs.core.nth.call(null,vec__9464,(1),null);
+var nindex = cljs.core.nth.call(null,vec__9464,(2),null);
+var G__9471 = (yoffset + (1));
+var G__9472 = nindex;
+var G__9473 = ncells;
+var G__9474 = nacc;
+yoffset = G__9471;
+index = G__9472;
+cells = G__9473;
+acc = G__9474;
 continue;
 }
 break;
@@ -240,25 +240,25 @@ return clojure.string.join.call(null," ",cljs.core.map.call(null,mrsudoku.model.
  * Fetch all the rows of a sudoku `grid`.
  */
 mrsudoku.model.grid.rows = (function mrsudoku$model$grid$rows(grid){
-var iter__4324__auto__ = (function mrsudoku$model$grid$rows_$_iter__9178(s__9179){
+var iter__4324__auto__ = (function mrsudoku$model$grid$rows_$_iter__9475(s__9476){
 return (new cljs.core.LazySeq(null,(function (){
-var s__9179__$1 = s__9179;
+var s__9476__$1 = s__9476;
 while(true){
-var temp__5720__auto__ = cljs.core.seq.call(null,s__9179__$1);
+var temp__5720__auto__ = cljs.core.seq.call(null,s__9476__$1);
 if(temp__5720__auto__){
-var s__9179__$2 = temp__5720__auto__;
-if(cljs.core.chunked_seq_QMARK_.call(null,s__9179__$2)){
-var c__4322__auto__ = cljs.core.chunk_first.call(null,s__9179__$2);
+var s__9476__$2 = temp__5720__auto__;
+if(cljs.core.chunked_seq_QMARK_.call(null,s__9476__$2)){
+var c__4322__auto__ = cljs.core.chunk_first.call(null,s__9476__$2);
 var size__4323__auto__ = cljs.core.count.call(null,c__4322__auto__);
-var b__9181 = cljs.core.chunk_buffer.call(null,size__4323__auto__);
-if((function (){var i__9180 = (0);
+var b__9478 = cljs.core.chunk_buffer.call(null,size__4323__auto__);
+if((function (){var i__9477 = (0);
 while(true){
-if((i__9180 < size__4323__auto__)){
-var i = cljs.core._nth.call(null,c__4322__auto__,i__9180);
-cljs.core.chunk_append.call(null,b__9181,mrsudoku.model.grid.row.call(null,grid,i));
+if((i__9477 < size__4323__auto__)){
+var i = cljs.core._nth.call(null,c__4322__auto__,i__9477);
+cljs.core.chunk_append.call(null,b__9478,mrsudoku.model.grid.row.call(null,grid,i));
 
-var G__9182 = (i__9180 + (1));
-i__9180 = G__9182;
+var G__9479 = (i__9477 + (1));
+i__9477 = G__9479;
 continue;
 } else {
 return true;
@@ -266,13 +266,13 @@ return true;
 break;
 }
 })()){
-return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__9181),mrsudoku$model$grid$rows_$_iter__9178.call(null,cljs.core.chunk_rest.call(null,s__9179__$2)));
+return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__9478),mrsudoku$model$grid$rows_$_iter__9475.call(null,cljs.core.chunk_rest.call(null,s__9476__$2)));
 } else {
-return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__9181),null);
+return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__9478),null);
 }
 } else {
-var i = cljs.core.first.call(null,s__9179__$2);
-return cljs.core.cons.call(null,mrsudoku.model.grid.row.call(null,grid,i),mrsudoku$model$grid$rows_$_iter__9178.call(null,cljs.core.rest.call(null,s__9179__$2)));
+var i = cljs.core.first.call(null,s__9476__$2);
+return cljs.core.cons.call(null,mrsudoku.model.grid.row.call(null,grid,i),mrsudoku$model$grid$rows_$_iter__9475.call(null,cljs.core.rest.call(null,s__9476__$2)));
 }
 } else {
 return null;
@@ -295,25 +295,25 @@ if(((((1) <= c)) && ((c <= (9))))){
 throw (new Error("Assert failed: (<= 1 c 9)"));
 }
 
-return cljs.core.into.call(null,cljs.core.PersistentVector.EMPTY,(function (){var iter__4324__auto__ = (function mrsudoku$model$grid$col_$_iter__9183(s__9184){
+return cljs.core.into.call(null,cljs.core.PersistentVector.EMPTY,(function (){var iter__4324__auto__ = (function mrsudoku$model$grid$col_$_iter__9480(s__9481){
 return (new cljs.core.LazySeq(null,(function (){
-var s__9184__$1 = s__9184;
+var s__9481__$1 = s__9481;
 while(true){
-var temp__5720__auto__ = cljs.core.seq.call(null,s__9184__$1);
+var temp__5720__auto__ = cljs.core.seq.call(null,s__9481__$1);
 if(temp__5720__auto__){
-var s__9184__$2 = temp__5720__auto__;
-if(cljs.core.chunked_seq_QMARK_.call(null,s__9184__$2)){
-var c__4322__auto__ = cljs.core.chunk_first.call(null,s__9184__$2);
+var s__9481__$2 = temp__5720__auto__;
+if(cljs.core.chunked_seq_QMARK_.call(null,s__9481__$2)){
+var c__4322__auto__ = cljs.core.chunk_first.call(null,s__9481__$2);
 var size__4323__auto__ = cljs.core.count.call(null,c__4322__auto__);
-var b__9186 = cljs.core.chunk_buffer.call(null,size__4323__auto__);
-if((function (){var i__9185 = (0);
+var b__9483 = cljs.core.chunk_buffer.call(null,size__4323__auto__);
+if((function (){var i__9482 = (0);
 while(true){
-if((i__9185 < size__4323__auto__)){
-var cy = cljs.core._nth.call(null,c__4322__auto__,i__9185);
-cljs.core.chunk_append.call(null,b__9186,mrsudoku.model.grid.cell.call(null,grid,c,cy));
+if((i__9482 < size__4323__auto__)){
+var cy = cljs.core._nth.call(null,c__4322__auto__,i__9482);
+cljs.core.chunk_append.call(null,b__9483,mrsudoku.model.grid.cell.call(null,grid,c,cy));
 
-var G__9187 = (i__9185 + (1));
-i__9185 = G__9187;
+var G__9484 = (i__9482 + (1));
+i__9482 = G__9484;
 continue;
 } else {
 return true;
@@ -321,13 +321,13 @@ return true;
 break;
 }
 })()){
-return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__9186),mrsudoku$model$grid$col_$_iter__9183.call(null,cljs.core.chunk_rest.call(null,s__9184__$2)));
+return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__9483),mrsudoku$model$grid$col_$_iter__9480.call(null,cljs.core.chunk_rest.call(null,s__9481__$2)));
 } else {
-return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__9186),null);
+return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__9483),null);
 }
 } else {
-var cy = cljs.core.first.call(null,s__9184__$2);
-return cljs.core.cons.call(null,mrsudoku.model.grid.cell.call(null,grid,c,cy),mrsudoku$model$grid$col_$_iter__9183.call(null,cljs.core.rest.call(null,s__9184__$2)));
+var cy = cljs.core.first.call(null,s__9481__$2);
+return cljs.core.cons.call(null,mrsudoku.model.grid.cell.call(null,grid,c,cy),mrsudoku$model$grid$col_$_iter__9480.call(null,cljs.core.rest.call(null,s__9481__$2)));
 }
 } else {
 return null;
@@ -357,19 +357,19 @@ while(true){
 if(cljs.core._EQ_.call(null,cx,(10))){
 return acc__$1;
 } else {
-var G__9188 = (cx + (1));
-var G__9189 = f.call(null,acc__$1,cx,cy,mrsudoku.model.grid.cell.call(null,grid,cx,cy));
-cx = G__9188;
-acc__$1 = G__9189;
+var G__9485 = (cx + (1));
+var G__9486 = f.call(null,acc__$1,cx,cy,mrsudoku.model.grid.cell.call(null,grid,cx,cy));
+cx = G__9485;
+acc__$1 = G__9486;
 continue;
 }
 break;
 }
 })();
-var G__9190 = (cy + (1));
-var G__9191 = nacc;
-cy = G__9190;
-acc = G__9191;
+var G__9487 = (cy + (1));
+var G__9488 = nacc;
+cy = G__9487;
+acc = G__9488;
 continue;
 }
 break;
@@ -393,13 +393,13 @@ return cljs.core.assoc.call(null,graph,vert,cljs.core.PersistentHashSet.EMPTY);
 }
 });
 mrsudoku.model.grid.add_edge = (function mrsudoku$model$grid$add_edge(graph,src,dest){
-return cljs.core.update.call(null,graph,src,(function (p1__9192_SHARP_){
-return cljs.core.conj.call(null,p1__9192_SHARP_,dest);
+return cljs.core.update.call(null,graph,src,(function (p1__9489_SHARP_){
+return cljs.core.conj.call(null,p1__9489_SHARP_,dest);
 }));
 });
 mrsudoku.model.grid.remove_edge = (function mrsudoku$model$grid$remove_edge(graph,src,dest){
-return cljs.core.update.call(null,graph,src,(function (p1__9193_SHARP_){
-return cljs.core.disj.call(null,p1__9193_SHARP_,dest);
+return cljs.core.update.call(null,graph,src,(function (p1__9490_SHARP_){
+return cljs.core.disj.call(null,p1__9490_SHARP_,dest);
 }));
 });
 
