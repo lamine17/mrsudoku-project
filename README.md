@@ -20,6 +20,18 @@ Keita Lamine 3520295
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 # mrsudoku
 
 Ce dépôt contient les sources du squelette pour le projet MrSudoku de l'UE 3I020 "programmation déclarative" de la licence d'informatique de Sorbonne Université.
